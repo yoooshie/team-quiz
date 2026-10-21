@@ -194,6 +194,14 @@
   /* ---------- home ---------- */
   .home-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; width: min(100%, 940px); text-align: left; }
   @media (min-width: 820px) { .home-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  .play-board { grid-column: 1 / -1; }
+  .play-summary { margin: 0; font-weight: 800; }
+  .play-detail summary { cursor: pointer; font-weight: 800; color: var(--muted); min-height: 44px; padding-block: 10px; }
+  .play-grid { display: flex; flex-direction: column; gap: 16px; padding-top: 6px; }
+  .play-grid select { min-height: 44px; padding: 6px 10px; border-radius: 12px; border: 3px solid var(--stitch); background: #fff; font-weight: 800; }
+  .sec-titles { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 10px; align-items: center; }
+  .sec-titles .text-input { min-height: 44px; }
+  .sec-sub { margin: 0; font-weight: 800; font-size: clamp(1.2rem, 0.9rem + 1.4vw, 2.2rem); background: var(--cream); padding: 12px 28px; border-radius: 22px; box-shadow: 0 6px 0 rgba(90, 70, 40, 0.18); }
   .home-grid .board { display: flex; flex-direction: column; gap: 12px; }
   .stat-big { font-size: clamp(2rem, 1.4rem + 2vw, 3.2rem); font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
 
@@ -353,6 +361,38 @@
       <p class="msg">「クイズをはじめる」を押すと、第1問の前にこの画面が出ます。</p>
       <button type="button" class="btn" id="toIntroEditBtn">説明画面をつくる・なおす</button>
     </div>
+    <div class="board play-board">
+      <span class="field-title">出題のしかた</span>
+      <p class="play-summary" id="playSummary"></p>
+      <details class="play-detail" id="playDetail">
+        <summary>詳細設定（必要なときだけ）</summary>
+        <div class="play-grid">
+          <div class="field">
+            <span class="field-title">並び順</span>
+            <div class="row" style="justify-content:flex-start" id="pOrder"></div>
+          </div>
+          <div class="field">
+            <span class="field-title">ジャンルの出し方</span>
+            <div class="row" style="justify-content:flex-start" id="pGroup"></div>
+          </div>
+          <div class="field" id="pSeqField">
+            <span class="field-title">ジャンルの順番</span>
+            <div class="row" style="justify-content:flex-start" id="pSeq"></div>
+          </div>
+          <div class="field">
+            <span class="field-title">その他の問題の数</span>
+            <div class="row" style="justify-content:flex-start" id="pCount"></div>
+          </div>
+          <div class="field" id="pSecField">
+            <label class="field-title"><input type="checkbox" id="pSecOn"> ジャンルの前に区切り画面を出す</label>
+            <div class="sec-titles" id="pSecTitles"></div>
+          </div>
+          <div class="row" style="justify-content:flex-start">
+            <button type="button" class="btn small" id="pReset">おまかせに戻す</button>
+          </div>
+        </div>
+      </details>
+    </div>
   </div>
   <button type="button" class="btn go" id="createBtn">部屋をつくる</button>
   <p class="msg" id="createMsg" role="status"></p>
@@ -423,6 +463,10 @@
         <span class="field-title">制限時間</span>
         <div class="row" style="justify-content:flex-start" id="fLimit"></div>
       </div>
+      <div class="field">
+        <span class="field-title">ジャンル</span>
+        <div class="row" style="justify-content:flex-start" id="fCat"></div>
+      </div>
       <div class="row" style="justify-content:flex-start">
         <button type="button" class="btn small" id="upBtn">↑ 前へ</button>
         <button type="button" class="btn small" id="downBtn">↓ 後ろへ</button>
@@ -481,6 +525,13 @@
       </div>
     </div>
   </div>
+</section>
+
+<section class="screen center" id="hSection" hidden>
+  <span class="eyebrow">ここからは…</span>
+  <h1><span class="sign" id="secTitle"></span></h1>
+  <p class="sec-sub" id="secSub"></p>
+  <button type="button" class="btn go" id="secGo">問題スタート！</button>
 </section>
 
 <section class="screen center" id="hIntro" hidden>
@@ -634,124 +685,124 @@
   // ("標準問題集に追加") stay in that browser until they are exported and pasted in here.
   var STANDARD_SETS = [
     { id: "part1", name: "標準問題集 パート1", questions: [
-      {"text": "FIDIA SOLUTIONSの企業理念はどれ？", "photo": null, "choices": ["「人」が集まる 「未来」がひらく", "「人」が輝く 「世界」がかわる", "「働く」が楽しい 「毎日」がかわる", "「人」をつなぐ 「世界」をつなぐ"], "correct": 1, "limit": 20},
-      {"text": "ミッション「『働く』を通して、人と企業の『〇〇』をゼロにする」。〇〇に入るのは？", "photo": null, "choices": ["ムダ", "不安", "ミスマッチ", "できない"], "correct": 3, "limit": 20},
-      {"text": "利用したことがある人が一番多い動画配信サービスは？（2026年の調査）", "photo": null, "choices": ["Netflix", "U-NEXT", "Amazonプライム・ビデオ", "ディズニープラス"], "correct": 2, "limit": 20},
-      {"text": "2026年上半期に一番見られたアニメは？", "photo": null, "choices": ["葬送のフリーレン", "呪術廻戦（死滅回游 前編）", "転生したらスライムだった件", "【推しの子】"], "correct": 1, "limit": 20},
-      {"text": "新しい1万円札の顔はだれ？", "photo": null, "choices": ["渋沢栄一", "福沢諭吉", "北里柴三郎", "野口英世"], "correct": 0, "limit": 20},
-      {"text": "新しい5千円札の顔はだれ？", "photo": null, "choices": ["樋口一葉", "与謝野晶子", "紫式部", "津田梅子"], "correct": 3, "limit": 20},
-      {"text": "新しい千円札の顔はだれ？", "photo": null, "choices": ["野口英世", "夏目漱石", "北里柴三郎", "渋沢栄一"], "correct": 2, "limit": 20},
-      {"text": "「タイパ」は何の略？", "photo": null, "choices": ["タイプパターン", "タイムパフォーマンス", "タイヤパンク", "タイトパンツ"], "correct": 1, "limit": 20},
-      {"text": "「〇〇しか勝たん」の意味は？", "photo": null, "choices": ["〇〇が一番いい", "〇〇には勝てない", "〇〇だけで勝負する", "〇〇にはもう飽きた"], "correct": 0, "limit": 20},
-      {"text": "「サブスク」は何の略？", "photo": null, "choices": ["サブスクリーン", "サブスクール", "サブスクランブル", "サブスクリプション"], "correct": 3, "limit": 20},
-      {"text": "インスタグラムの「ストーリーズ」は、投稿から何時間で消える？", "photo": null, "choices": ["6時間", "12時間", "24時間", "48時間"], "correct": 2, "limit": 20},
-      {"text": "YouTubeショートに投稿できる動画は、最大何分？", "photo": null, "choices": ["1分", "3分", "5分", "10分"], "correct": 1, "limit": 20},
-      {"text": "SNSの「X（エックス）」、前の名前は？", "photo": null, "choices": ["Twitter", "Facebook", "Threads", "Tumblr"], "correct": 0, "limit": 20},
-      {"text": "ChatGPTをつくった会社は？", "photo": null, "choices": ["Google", "Apple", "Meta", "OpenAI"], "correct": 3, "limit": 20},
-      {"text": "日本で店舗数が一番多いコンビニは？", "photo": null, "choices": ["ファミリーマート", "ローソン", "セブン-イレブン", "ミニストップ"], "correct": 2, "limit": 20},
-      {"text": "大谷翔平選手が所属しているチームは？", "photo": null, "choices": ["ロサンゼルス・エンゼルス", "ロサンゼルス・ドジャース", "ニューヨーク・ヤンキース", "シカゴ・カブス"], "correct": 1, "limit": 20},
-      {"text": "大谷翔平選手の背番号は？", "photo": null, "choices": ["17", "11", "16", "51"], "correct": 0, "limit": 20},
-      {"text": "2024年に大谷翔平選手が達成した、メジャー史上初の記録は？", "photo": null, "choices": ["30-30", "40-40", "60-60", "50-50（50本塁打・50盗塁）"], "correct": 3, "limit": 20},
-      {"text": "2026年の冬季オリンピックの開催地は？", "photo": null, "choices": ["北京（中国）", "パリ（フランス）", "ミラノ・コルティナ（イタリア）", "ソルトレークシティ（アメリカ）"], "correct": 2, "limit": 20},
-      {"text": "2028年の夏季オリンピックの開催都市は？", "photo": null, "choices": ["パリ", "ロサンゼルス", "ブリスベン", "東京"], "correct": 1, "limit": 20},
-      {"text": "2026年のサッカーワールドカップ、出場するのは何チーム？", "photo": null, "choices": ["48チーム", "32チーム", "40チーム", "64チーム"], "correct": 0, "limit": 20},
-      {"text": "2022年から、日本の成人年齢は何歳になった？", "photo": null, "choices": ["16歳", "20歳", "22歳", "18歳"], "correct": 3, "limit": 20},
-      {"text": "「新NISA」が始まったのは何年？", "photo": null, "choices": ["2020年", "2022年", "2024年", "2026年"], "correct": 2, "limit": 20},
-      {"text": "「Nintendo Switch 2」が発売されたのは何年？", "photo": null, "choices": ["2023年", "2025年", "2024年", "2026年"], "correct": 1, "limit": 20},
-      {"text": "東京スカイツリーの高さは？", "photo": null, "choices": ["634m", "333m", "450m", "828m"], "correct": 0, "limit": 20},
-      {"text": "「ちいかわ」の作者はだれ？", "photo": null, "choices": ["カナヘイ", "にしむらゆうじ", "尾田栄一郎", "ナガノ"], "correct": 3, "limit": 20},
-      {"text": "『鬼滅の刃』の主人公はだれ？", "photo": null, "choices": ["我妻善逸", "嘴平伊之助", "竈門炭治郎", "冨岡義勇"], "correct": 2, "limit": 20},
-      {"text": "「インバウンド」の意味は？", "photo": null, "choices": ["日本人が海外に旅行すること", "外国人が日本に旅行に来ること", "室内でするスポーツ", "電話の受付窓口"], "correct": 1, "limit": 20},
-      {"text": "「Z世代」はおおむね何年ごろに生まれた人たち？", "photo": null, "choices": ["1990年代後半〜2010年代前半", "1960年代", "1980年代", "2020年代"], "correct": 0, "limit": 20},
-      {"text": "日本の人口はおよそ何人？", "photo": null, "choices": ["約8千万人", "約1億6千万人", "約2億人", "約1億2千万人"], "correct": 3, "limit": 20},
-      {"text": "消費税の標準の税率は何％？", "photo": null, "choices": ["5％", "8％", "10％", "15％"], "correct": 2, "limit": 20},
-      {"text": "「エモい」の意味に一番近いのは？", "photo": null, "choices": ["めんどうくさい", "心がグッと動かされる", "こわい", "ねむい"], "correct": 1, "limit": 20},
-      {"text": "世界で一番面積が大きい国は？", "photo": null, "choices": ["カナダ", "アメリカ", "ロシア", "中国"], "correct": 2, "limit": 20},
-      {"text": "日本で面積が一番大きい都道府県は？", "photo": null, "choices": ["岩手県", "長野県", "北海道", "新潟県"], "correct": 2, "limit": 20},
-      {"text": "大阪・関西万博（2025年）の来場者数はおよそ何人？", "photo": null, "choices": ["約900万人", "約5,000万人", "約2,900万人", "約1億人"], "correct": 2, "limit": 20},
-      {"text": "大阪・関西万博のシンボル「大屋根リング」。1周の長さはおよそ？", "photo": null, "choices": ["約500m", "約5km", "約2km", "約10km"], "correct": 2, "limit": 20},
-      {"text": "電話に出るのが遅れてしまったとき、最初に言う言葉は？", "photo": null, "choices": ["「もしもし」", "「遅くなってすみません」", "「お待たせいたしました」", "「はい、どうぞ」"], "correct": 2, "limit": 20},
-      {"text": "ビジネスでよく聞く「なるはや」の意味は？", "photo": null, "choices": ["なるべく派手に", "鳴ったら早く出る", "なるべく早く", "なるほど早い"], "correct": 2, "limit": 20}
+      {"text": "FIDIA SOLUTIONSの企業理念はどれ？", "photo": null, "choices": ["「人」が集まる 「未来」がひらく", "「人」が輝く 「世界」がかわる", "「働く」が楽しい 「毎日」がかわる", "「人」をつなぐ 「世界」をつなぐ"], "correct": 1, "limit": 20, "cat": "company"},
+      {"text": "ミッション「『働く』を通して、人と企業の『〇〇』をゼロにする」。〇〇に入るのは？", "photo": null, "choices": ["ムダ", "不安", "ミスマッチ", "できない"], "correct": 3, "limit": 20, "cat": "company"},
+      {"text": "利用したことがある人が一番多い動画配信サービスは？（2026年の調査）", "photo": null, "choices": ["Netflix", "U-NEXT", "Amazonプライム・ビデオ", "ディズニープラス"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "2026年上半期に一番見られたアニメは？", "photo": null, "choices": ["葬送のフリーレン", "呪術廻戦（死滅回游 前編）", "転生したらスライムだった件", "【推しの子】"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "新しい1万円札の顔はだれ？", "photo": null, "choices": ["渋沢栄一", "福沢諭吉", "北里柴三郎", "野口英世"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "新しい5千円札の顔はだれ？", "photo": null, "choices": ["樋口一葉", "与謝野晶子", "紫式部", "津田梅子"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "新しい千円札の顔はだれ？", "photo": null, "choices": ["野口英世", "夏目漱石", "北里柴三郎", "渋沢栄一"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「タイパ」は何の略？", "photo": null, "choices": ["タイプパターン", "タイムパフォーマンス", "タイヤパンク", "タイトパンツ"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "「〇〇しか勝たん」の意味は？", "photo": null, "choices": ["〇〇が一番いい", "〇〇には勝てない", "〇〇だけで勝負する", "〇〇にはもう飽きた"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "「サブスク」は何の略？", "photo": null, "choices": ["サブスクリーン", "サブスクール", "サブスクランブル", "サブスクリプション"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "インスタグラムの「ストーリーズ」は、投稿から何時間で消える？", "photo": null, "choices": ["6時間", "12時間", "24時間", "48時間"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "YouTubeショートに投稿できる動画は、最大何分？", "photo": null, "choices": ["1分", "3分", "5分", "10分"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "SNSの「X（エックス）」、前の名前は？", "photo": null, "choices": ["Twitter", "Facebook", "Threads", "Tumblr"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "ChatGPTをつくった会社は？", "photo": null, "choices": ["Google", "Apple", "Meta", "OpenAI"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "日本で店舗数が一番多いコンビニは？", "photo": null, "choices": ["ファミリーマート", "ローソン", "セブン-イレブン", "ミニストップ"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "大谷翔平選手が所属しているチームは？", "photo": null, "choices": ["ロサンゼルス・エンゼルス", "ロサンゼルス・ドジャース", "ニューヨーク・ヤンキース", "シカゴ・カブス"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "大谷翔平選手の背番号は？", "photo": null, "choices": ["17", "11", "16", "51"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "2024年に大谷翔平選手が達成した、メジャー史上初の記録は？", "photo": null, "choices": ["30-30", "40-40", "60-60", "50-50（50本塁打・50盗塁）"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "2026年の冬季オリンピックの開催地は？", "photo": null, "choices": ["北京（中国）", "パリ（フランス）", "ミラノ・コルティナ（イタリア）", "ソルトレークシティ（アメリカ）"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "2028年の夏季オリンピックの開催都市は？", "photo": null, "choices": ["パリ", "ロサンゼルス", "ブリスベン", "東京"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "2026年のサッカーワールドカップ、出場するのは何チーム？", "photo": null, "choices": ["48チーム", "32チーム", "40チーム", "64チーム"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "2022年から、日本の成人年齢は何歳になった？", "photo": null, "choices": ["16歳", "20歳", "22歳", "18歳"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "「新NISA」が始まったのは何年？", "photo": null, "choices": ["2020年", "2022年", "2024年", "2026年"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「Nintendo Switch 2」が発売されたのは何年？", "photo": null, "choices": ["2023年", "2025年", "2024年", "2026年"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "東京スカイツリーの高さは？", "photo": null, "choices": ["634m", "333m", "450m", "828m"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "「ちいかわ」の作者はだれ？", "photo": null, "choices": ["カナヘイ", "にしむらゆうじ", "尾田栄一郎", "ナガノ"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "『鬼滅の刃』の主人公はだれ？", "photo": null, "choices": ["我妻善逸", "嘴平伊之助", "竈門炭治郎", "冨岡義勇"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「インバウンド」の意味は？", "photo": null, "choices": ["日本人が海外に旅行すること", "外国人が日本に旅行に来ること", "室内でするスポーツ", "電話の受付窓口"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "「Z世代」はおおむね何年ごろに生まれた人たち？", "photo": null, "choices": ["1990年代後半〜2010年代前半", "1960年代", "1980年代", "2020年代"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "日本の人口はおよそ何人？", "photo": null, "choices": ["約8千万人", "約1億6千万人", "約2億人", "約1億2千万人"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "消費税の標準の税率は何％？", "photo": null, "choices": ["5％", "8％", "10％", "15％"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「エモい」の意味に一番近いのは？", "photo": null, "choices": ["めんどうくさい", "心がグッと動かされる", "こわい", "ねむい"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "世界で一番面積が大きい国は？", "photo": null, "choices": ["カナダ", "アメリカ", "ロシア", "中国"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "日本で面積が一番大きい都道府県は？", "photo": null, "choices": ["岩手県", "長野県", "北海道", "新潟県"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "大阪・関西万博（2025年）の来場者数はおよそ何人？", "photo": null, "choices": ["約900万人", "約5,000万人", "約2,900万人", "約1億人"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "大阪・関西万博のシンボル「大屋根リング」。1周の長さはおよそ？", "photo": null, "choices": ["約500m", "約5km", "約2km", "約10km"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "電話に出るのが遅れてしまったとき、最初に言う言葉は？", "photo": null, "choices": ["「もしもし」", "「遅くなってすみません」", "「お待たせいたしました」", "「はい、どうぞ」"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "ビジネスでよく聞く「なるはや」の意味は？", "photo": null, "choices": ["なるべく派手に", "鳴ったら早く出る", "なるべく早く", "なるほど早い"], "correct": 2, "limit": 20, "cat": "other"}
     ] },
     { id: "part2", name: "標準問題集 パート2", questions: [
-      {"text": "FIDIA SOLUTIONSの企業理念はどれ？", "photo": null, "choices": ["「人」が集まる 「未来」がひらく", "「働く」が楽しい 「毎日」がかわる", "「人」が輝く 「世界」がかわる", "「人」をつなぐ 「世界」をつなぐ"], "correct": 2, "limit": 20},
-      {"text": "ミッション「『働く』を通して、人と企業の『〇〇』をゼロにする」。〇〇に入るのは？", "photo": null, "choices": ["できない", "ムダ", "不安", "ミスマッチ"], "correct": 0, "limit": 20},
-      {"text": "日本で人口が2番目に多い都道府県は？（2026年10月時点）", "photo": null, "choices": ["大阪府", "愛知県", "神奈川県", "埼玉県"], "correct": 2, "limit": 20},
-      {"text": "日本人に一番多い血液型は？", "photo": null, "choices": ["O型", "A型", "B型", "AB型"], "correct": 1, "limit": 20},
-      {"text": "回転ずしで「よく食べるネタ」の1位は？（2026年10月時点の最新調査）", "photo": null, "choices": ["サーモン", "マグロ（赤身）", "ハマチ・ブリ", "えび"], "correct": 0, "limit": 20},
-      {"text": "世界で一番人口が多い国は？（2026年10月時点）", "photo": null, "choices": ["中国", "アメリカ", "インドネシア", "インド"], "correct": 3, "limit": 20},
-      {"text": "日本で2番目に多い名字は？（2026年10月時点）", "photo": null, "choices": ["佐藤", "高橋", "鈴木", "田中"], "correct": 2, "limit": 20},
-      {"text": "日本で人口が一番多い市は？（2026年10月時点）", "photo": null, "choices": ["大阪市", "横浜市", "名古屋市", "札幌市"], "correct": 1, "limit": 20},
-      {"text": "1日に乗り降りする人の数が世界一の駅は？", "photo": null, "choices": ["新宿駅", "東京駅", "大阪（梅田）駅", "グランド・セントラル駅（ニューヨーク）"], "correct": 0, "limit": 20},
-      {"text": "日本で店舗数が一番多いファストフードチェーンは？（2026年10月時点）", "photo": null, "choices": ["モスバーガー", "ケンタッキーフライドチキン", "ミスタードーナツ", "マクドナルド"], "correct": 3, "limit": 20},
-      {"text": "大阪駅から一番近いのはどこ？（直線距離）", "photo": null, "choices": ["伊丹空港", "万博記念公園", "USJ（ユニバーサル・スタジオ・ジャパン）", "関西国際空港"], "correct": 2, "limit": 20},
-      {"text": "大阪府の面積は、47都道府県で小さいほうから何番目？", "photo": null, "choices": ["1番目", "2番目", "5番目", "10番目"], "correct": 1, "limit": 20},
-      {"text": "あべのハルカスの高さは？", "photo": null, "choices": ["300m", "250m", "333m", "634m"], "correct": 0, "limit": 20},
-      {"text": "「京の着倒れ、大阪の〇〇倒れ」。〇〇に入るのは？", "photo": null, "choices": ["飲み", "寝", "笑い", "食い"], "correct": 3, "limit": 20},
-      {"text": "大阪・関西万博の公式キャラクターは？", "photo": null, "choices": ["せんとくん", "くまモン", "ミャクミャク", "ひこにゃん"], "correct": 2, "limit": 20},
-      {"text": "道頓堀にある、両手を上げて走るランナーの看板。どこの会社の看板？", "photo": null, "choices": ["森永製菓", "江崎グリコ", "明治", "ロッテ"], "correct": 1, "limit": 20},
-      {"text": "「551蓬莱」の看板商品は？", "photo": null, "choices": ["豚まん", "焼売", "餃子", "ちまき"], "correct": 0, "limit": 20},
-      {"text": "「ホウレンソウ」は何の略？", "photo": null, "choices": ["方法・連携・相互", "報告・練習・総括", "法律・連絡・相談", "報告・連絡・相談"], "correct": 3, "limit": 20},
-      {"text": "目上の人への返事として、よりふさわしいのは？", "photo": null, "choices": ["了解です", "りょ", "承知しました", "大丈夫です"], "correct": 2, "limit": 20},
-      {"text": "「お手すきの際に」の意味は？", "photo": null, "choices": ["今すぐに", "手が空いているときに", "来週までに", "手書きで"], "correct": 1, "limit": 20},
-      {"text": "自分の会社をへりくだって言う言葉は？", "photo": null, "choices": ["弊社", "御社", "貴社", "本社"], "correct": 0, "limit": 20},
-      {"text": "ビジネス用語「リスケ」の意味は？", "photo": null, "choices": ["資料を見直すこと", "危険を減らすこと", "会議を録画すること", "予定を組み直すこと"], "correct": 3, "limit": 20},
-      {"text": "「業務を遂行する」。「遂行」の読みは？", "photo": null, "choices": ["ついこう", "すいぎょう", "すいこう", "ついぎょう"], "correct": 2, "limit": 20},
-      {"text": "「承る」の読みは？", "photo": null, "choices": ["しょうる", "うけたまわる", "うけたる", "たまわる"], "correct": 1, "limit": 20},
-      {"text": "書類に「捺印」をお願いします。「捺印」の読みは？", "photo": null, "choices": ["なついん", "ないん", "だいん", "そういん"], "correct": 0, "limit": 20},
-      {"text": "「汚名〇〇」。正しいのはどれ？", "photo": null, "choices": ["挽回", "回復", "撤回", "返上"], "correct": 3, "limit": 20},
-      {"text": "「ガチ勢」の意味は？", "photo": null, "choices": ["始めたばかりの人たち", "見ているだけの人たち", "本気で取り組んでいる人たち", "お金をかけている人たち"], "correct": 2, "limit": 20},
-      {"text": "「ポン酢」の「ポン」は何語から来ている？", "photo": null, "choices": ["ポルトガル語", "オランダ語", "英語", "中国語"], "correct": 1, "limit": 20},
-      {"text": "「パン」という言葉は何語から来た？", "photo": null, "choices": ["ポルトガル語", "フランス語", "英語", "ドイツ語"], "correct": 0, "limit": 20},
-      {"text": "「数の子」は何の魚の卵？", "photo": null, "choices": ["サケ", "タラ", "トビウオ", "ニシン"], "correct": 3, "limit": 20},
-      {"text": "『千と千尋の神隠し』で千尋が働く湯屋の名前は？", "photo": null, "choices": ["湯婆婆屋", "千年屋", "油屋", "不思議屋"], "correct": 2, "limit": 20},
-      {"text": "『名探偵コナン』江戸川コナンの本当の名前は？", "photo": null, "choices": ["服部平次", "工藤新一", "毛利小五郎", "黒羽快斗"], "correct": 1, "limit": 20},
-      {"text": "ピカチュウのタイプは？", "photo": null, "choices": ["でんき", "ノーマル", "ほのお", "フェアリー"], "correct": 0, "limit": 20},
-      {"text": "ゲーム「テトリス」が生まれた国は？", "photo": null, "choices": ["アメリカ", "日本", "イギリス", "ソ連（今のロシア）"], "correct": 3, "limit": 20},
-      {"text": "フルマラソンの距離は？", "photo": null, "choices": ["40.000km", "41.195km", "42.195km", "45.195km"], "correct": 2, "limit": 20},
-      {"text": "ニューヨークの「自由の女神」。アメリカに贈った国は？", "photo": null, "choices": ["イギリス", "フランス", "イタリア", "スペイン"], "correct": 1, "limit": 20},
-      {"text": "大相撲で一番上の地位は？", "photo": null, "choices": ["横綱", "大関", "関脇", "小結"], "correct": 0, "limit": 20},
-      {"text": "メールの「BCC」の特徴は？", "photo": null, "choices": ["受け取った人どうしでアドレスが見えない", "必ず返事をしないといけない", "受け取った全員のアドレスが見える", "送った人のアドレスがかくれる"], "correct": 0, "limit": 20}
+      {"text": "FIDIA SOLUTIONSの企業理念はどれ？", "photo": null, "choices": ["「人」が集まる 「未来」がひらく", "「働く」が楽しい 「毎日」がかわる", "「人」が輝く 「世界」がかわる", "「人」をつなぐ 「世界」をつなぐ"], "correct": 2, "limit": 20, "cat": "company"},
+      {"text": "ミッション「『働く』を通して、人と企業の『〇〇』をゼロにする」。〇〇に入るのは？", "photo": null, "choices": ["できない", "ムダ", "不安", "ミスマッチ"], "correct": 0, "limit": 20, "cat": "company"},
+      {"text": "日本で人口が2番目に多い都道府県は？（2026年10月時点）", "photo": null, "choices": ["大阪府", "愛知県", "神奈川県", "埼玉県"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "日本人に一番多い血液型は？", "photo": null, "choices": ["O型", "A型", "B型", "AB型"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "回転ずしで「よく食べるネタ」の1位は？（2026年10月時点の最新調査）", "photo": null, "choices": ["サーモン", "マグロ（赤身）", "ハマチ・ブリ", "えび"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "世界で一番人口が多い国は？（2026年10月時点）", "photo": null, "choices": ["中国", "アメリカ", "インドネシア", "インド"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "日本で2番目に多い名字は？（2026年10月時点）", "photo": null, "choices": ["佐藤", "高橋", "鈴木", "田中"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "日本で人口が一番多い市は？（2026年10月時点）", "photo": null, "choices": ["大阪市", "横浜市", "名古屋市", "札幌市"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "1日に乗り降りする人の数が世界一の駅は？", "photo": null, "choices": ["新宿駅", "東京駅", "大阪（梅田）駅", "グランド・セントラル駅（ニューヨーク）"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "日本で店舗数が一番多いファストフードチェーンは？（2026年10月時点）", "photo": null, "choices": ["モスバーガー", "ケンタッキーフライドチキン", "ミスタードーナツ", "マクドナルド"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "大阪駅から一番近いのはどこ？（直線距離）", "photo": null, "choices": ["伊丹空港", "万博記念公園", "USJ（ユニバーサル・スタジオ・ジャパン）", "関西国際空港"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "大阪府の面積は、47都道府県で小さいほうから何番目？", "photo": null, "choices": ["1番目", "2番目", "5番目", "10番目"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "あべのハルカスの高さは？", "photo": null, "choices": ["300m", "250m", "333m", "634m"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "「京の着倒れ、大阪の〇〇倒れ」。〇〇に入るのは？", "photo": null, "choices": ["飲み", "寝", "笑い", "食い"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "大阪・関西万博の公式キャラクターは？", "photo": null, "choices": ["せんとくん", "くまモン", "ミャクミャク", "ひこにゃん"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "道頓堀にある、両手を上げて走るランナーの看板。どこの会社の看板？", "photo": null, "choices": ["森永製菓", "江崎グリコ", "明治", "ロッテ"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "「551蓬莱」の看板商品は？", "photo": null, "choices": ["豚まん", "焼売", "餃子", "ちまき"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "「ホウレンソウ」は何の略？", "photo": null, "choices": ["方法・連携・相互", "報告・練習・総括", "法律・連絡・相談", "報告・連絡・相談"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "目上の人への返事として、よりふさわしいのは？", "photo": null, "choices": ["了解です", "りょ", "承知しました", "大丈夫です"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「お手すきの際に」の意味は？", "photo": null, "choices": ["今すぐに", "手が空いているときに", "来週までに", "手書きで"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "自分の会社をへりくだって言う言葉は？", "photo": null, "choices": ["弊社", "御社", "貴社", "本社"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "ビジネス用語「リスケ」の意味は？", "photo": null, "choices": ["資料を見直すこと", "危険を減らすこと", "会議を録画すること", "予定を組み直すこと"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "「業務を遂行する」。「遂行」の読みは？", "photo": null, "choices": ["ついこう", "すいぎょう", "すいこう", "ついぎょう"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「承る」の読みは？", "photo": null, "choices": ["しょうる", "うけたまわる", "うけたる", "たまわる"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "書類に「捺印」をお願いします。「捺印」の読みは？", "photo": null, "choices": ["なついん", "ないん", "だいん", "そういん"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "「汚名〇〇」。正しいのはどれ？", "photo": null, "choices": ["挽回", "回復", "撤回", "返上"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "「ガチ勢」の意味は？", "photo": null, "choices": ["始めたばかりの人たち", "見ているだけの人たち", "本気で取り組んでいる人たち", "お金をかけている人たち"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「ポン酢」の「ポン」は何語から来ている？", "photo": null, "choices": ["ポルトガル語", "オランダ語", "英語", "中国語"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "「パン」という言葉は何語から来た？", "photo": null, "choices": ["ポルトガル語", "フランス語", "英語", "ドイツ語"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "「数の子」は何の魚の卵？", "photo": null, "choices": ["サケ", "タラ", "トビウオ", "ニシン"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "『千と千尋の神隠し』で千尋が働く湯屋の名前は？", "photo": null, "choices": ["湯婆婆屋", "千年屋", "油屋", "不思議屋"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "『名探偵コナン』江戸川コナンの本当の名前は？", "photo": null, "choices": ["服部平次", "工藤新一", "毛利小五郎", "黒羽快斗"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "ピカチュウのタイプは？", "photo": null, "choices": ["でんき", "ノーマル", "ほのお", "フェアリー"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "ゲーム「テトリス」が生まれた国は？", "photo": null, "choices": ["アメリカ", "日本", "イギリス", "ソ連（今のロシア）"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "フルマラソンの距離は？", "photo": null, "choices": ["40.000km", "41.195km", "42.195km", "45.195km"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "ニューヨークの「自由の女神」。アメリカに贈った国は？", "photo": null, "choices": ["イギリス", "フランス", "イタリア", "スペイン"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "大相撲で一番上の地位は？", "photo": null, "choices": ["横綱", "大関", "関脇", "小結"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "メールの「BCC」の特徴は？", "photo": null, "choices": ["受け取った人どうしでアドレスが見えない", "必ず返事をしないといけない", "受け取った全員のアドレスが見える", "送った人のアドレスがかくれる"], "correct": 0, "limit": 20, "cat": "other"}
     ] },
     { id: "part3", name: "標準問題集 パート3", questions: [
-      {"text": "FIDIA SOLUTIONSの企業理念はどれ？", "photo": null, "choices": ["「人」が集まる 「未来」がひらく", "「働く」が楽しい 「毎日」がかわる", "「人」をつなぐ 「世界」をつなぐ", "「人」が輝く 「世界」がかわる"], "correct": 3, "limit": 20},
-      {"text": "ミッション「『働く』を通して、人と企業の『〇〇』をゼロにする」。〇〇に入るのは？", "photo": null, "choices": ["ムダ", "できない", "不安", "ミスマッチ"], "correct": 1, "limit": 20},
-      {"text": "日本で面積が2番目に大きい都道府県は？", "photo": null, "choices": ["福島県", "長野県", "新潟県", "岩手県"], "correct": 3, "limit": 20},
-      {"text": "日本で人口が一番少ない都道府県は？（2026年10月時点）", "photo": null, "choices": ["島根県", "高知県", "鳥取県", "徳島県"], "correct": 2, "limit": 20},
-      {"text": "世界で面積が2番目に大きい国は？", "photo": null, "choices": ["アメリカ", "カナダ", "中国", "ブラジル"], "correct": 1, "limit": 20},
-      {"text": "日本で一番多い名字は？（2026年10月時点）", "photo": null, "choices": ["佐藤", "鈴木", "高橋", "田中"], "correct": 0, "limit": 20},
-      {"text": "母語として話す人が世界で一番多い言語は？（2026年10月時点）", "photo": null, "choices": ["英語", "スペイン語", "ヒンディー語", "中国語"], "correct": 3, "limit": 20},
-      {"text": "一番速く走る新幹線は？（2026年10月時点）", "photo": null, "choices": ["のぞみ", "みずほ", "はやぶさ（時速320km）", "かがやき"], "correct": 2, "limit": 20},
-      {"text": "大阪府で人口が2番目に多い市は？（2026年10月時点）", "photo": null, "choices": ["東大阪市", "堺市", "豊中市", "枚方市"], "correct": 1, "limit": 20},
-      {"text": "日本で面積が一番小さい都道府県は？", "photo": null, "choices": ["香川県", "大阪府", "東京都", "沖縄県"], "correct": 0, "limit": 20},
-      {"text": "大阪府の人口は、47都道府県で多いほうから何番目？（2026年10月時点）", "photo": null, "choices": ["1番目", "2番目", "5番目", "3番目"], "correct": 3, "limit": 20},
-      {"text": "大阪・関西万博の会場になった人工島は？", "photo": null, "choices": ["咲洲（さきしま）", "舞洲（まいしま）", "夢洲（ゆめしま）", "六甲アイランド"], "correct": 2, "limit": 20},
-      {"text": "道頓堀の「くいだおれ太郎」が持っている楽器は？", "photo": null, "choices": ["ラッパ", "太鼓", "三味線", "シンバル"], "correct": 1, "limit": 20},
-      {"text": "通天閣のビリケンさん。どこをなでると御利益がある？", "photo": null, "choices": ["足の裏", "頭", "おなか", "ほっぺ"], "correct": 0, "limit": 20},
-      {"text": "大阪で最初に開業した地下鉄の路線は？", "photo": null, "choices": ["谷町線", "堺筋線", "中央線", "御堂筋線"], "correct": 3, "limit": 20},
-      {"text": "大阪のエスカレーター。立ち止まる人が多いのはどっち側？", "photo": null, "choices": ["左側", "真ん中", "右側", "決まっていない"], "correct": 2, "limit": 20},
-      {"text": "大阪城を築いた人物は？", "photo": null, "choices": ["織田信長", "豊臣秀吉", "徳川家康", "明智光秀"], "correct": 1, "limit": 20},
-      {"text": "会話の中で、相手の会社をうやまって言う言葉は？", "photo": null, "choices": ["御社", "弊社", "当社", "本社"], "correct": 0, "limit": 20},
-      {"text": "お願いごとの前に添えて、言い方をやわらかくする「クッション言葉」はどれ？", "photo": null, "choices": ["「ちなみに」", "「ぶっちゃけ」", "「なんなら」", "「恐れ入りますが」"], "correct": 3, "limit": 20},
-      {"text": "電話で相手の声が聞き取りにくいとき、ていねいな言い方は？", "photo": null, "choices": ["「声が小さいです」", "「もっと大きな声でお願いします」", "「お電話が少し遠いようです」", "「何て言いました？」"], "correct": 2, "limit": 20},
-      {"text": "報告で大事な「5W1H」。最後の「H」は何？", "photo": null, "choices": ["Here（ここで）", "How（どのように）", "Hope（のぞみ）", "Help（たすけ）"], "correct": 1, "limit": 20},
-      {"text": "仕事に遅刻しそうなとき、連絡はいつする？", "photo": null, "choices": ["遅れるとわかった時点ですぐ", "会社に着いてから", "始業時刻を過ぎてから", "お昼休みに"], "correct": 0, "limit": 20},
-      {"text": "「目処が立つ」。「目処」の読みは？", "photo": null, "choices": ["もくしょ", "めどころ", "もくど", "めど"], "correct": 3, "limit": 20},
-      {"text": "「〆切」の読みは？", "photo": null, "choices": ["かんきり", "ばつきり", "しめきり", "しめいり"], "correct": 2, "limit": 20},
-      {"text": "「蛙化現象」の、いまの使われ方は？", "photo": null, "choices": ["急に人見知りになること", "好きな人のちょっとした言動で気持ちが冷めること", "同じ場所から動きたくなくなること", "朝なかなか起きられなくなること"], "correct": 1, "limit": 20},
-      {"text": "書類に「押印」をお願いします。「押印」の読みは？", "photo": null, "choices": ["おういん", "おしいん", "こういん", "あついん"], "correct": 0, "limit": 20},
-      {"text": "「急がば〇〇」。〇〇に入るのは？", "photo": null, "choices": ["走れ", "止まれ", "休め", "回れ"], "correct": 3, "limit": 20},
-      {"text": "「カステラ」を日本に伝えた国は？", "photo": null, "choices": ["オランダ", "スペイン", "ポルトガル", "イタリア"], "correct": 2, "limit": 20},
-      {"text": "「ナポリタン」が生まれた国は？", "photo": null, "choices": ["イタリア", "日本", "アメリカ", "フランス"], "correct": 1, "limit": 20},
-      {"text": "農林水産省の分け方で、スイカは何に入る？", "photo": null, "choices": ["野菜", "果物", "ナッツ", "穀物"], "correct": 0, "limit": 20},
-      {"text": "ドラえもんの大好物は？", "photo": null, "choices": ["たい焼き", "大福", "みたらし団子", "どら焼き"], "correct": 3, "limit": 20},
-      {"text": "スーパーマリオの弟の名前は？", "photo": null, "choices": ["ワリオ", "ヨッシー", "ルイージ", "キノピオ"], "correct": 2, "limit": 20},
-      {"text": "『ちびまる子ちゃん』の舞台になっている県は？", "photo": null, "choices": ["愛知県", "静岡県", "神奈川県", "千葉県"], "correct": 1, "limit": 20},
-      {"text": "『進撃の巨人』の主人公は？", "photo": null, "choices": ["エレン・イェーガー", "リヴァイ", "アルミン・アルレルト", "ミカサ・アッカーマン"], "correct": 0, "limit": 20},
-      {"text": "オリンピックの五輪マーク。一番左の輪の色は？", "photo": null, "choices": ["赤", "黄", "緑", "青"], "correct": 3, "limit": 20},
-      {"text": "今も営業を続けている遊園地で、日本で一番古いのは？", "photo": null, "choices": ["よみうりランド", "東京ディズニーランド", "ひらかたパーク", "ナガシマスパーランド"], "correct": 2, "limit": 20},
-      {"text": "世界で一番面積が小さい国は？", "photo": null, "choices": ["モナコ", "バチカン市国", "サンマリノ", "リヒテンシュタイン"], "correct": 1, "limit": 20},
-      {"text": "サッカーで、1人の選手が1試合で3点決めることを何という？", "photo": null, "choices": ["ターキー", "ハットトリック", "ホールインワン", "グランドスラム"], "correct": 1, "limit": 20}
+      {"text": "FIDIA SOLUTIONSの企業理念はどれ？", "photo": null, "choices": ["「人」が集まる 「未来」がひらく", "「働く」が楽しい 「毎日」がかわる", "「人」をつなぐ 「世界」をつなぐ", "「人」が輝く 「世界」がかわる"], "correct": 3, "limit": 20, "cat": "company"},
+      {"text": "ミッション「『働く』を通して、人と企業の『〇〇』をゼロにする」。〇〇に入るのは？", "photo": null, "choices": ["ムダ", "できない", "不安", "ミスマッチ"], "correct": 1, "limit": 20, "cat": "company"},
+      {"text": "日本で面積が2番目に大きい都道府県は？", "photo": null, "choices": ["福島県", "長野県", "新潟県", "岩手県"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "日本で人口が一番少ない都道府県は？（2026年10月時点）", "photo": null, "choices": ["島根県", "高知県", "鳥取県", "徳島県"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "世界で面積が2番目に大きい国は？", "photo": null, "choices": ["アメリカ", "カナダ", "中国", "ブラジル"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "日本で一番多い名字は？（2026年10月時点）", "photo": null, "choices": ["佐藤", "鈴木", "高橋", "田中"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "母語として話す人が世界で一番多い言語は？（2026年10月時点）", "photo": null, "choices": ["英語", "スペイン語", "ヒンディー語", "中国語"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "一番速く走る新幹線は？（2026年10月時点）", "photo": null, "choices": ["のぞみ", "みずほ", "はやぶさ（時速320km）", "かがやき"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "大阪府で人口が2番目に多い市は？（2026年10月時点）", "photo": null, "choices": ["東大阪市", "堺市", "豊中市", "枚方市"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "日本で面積が一番小さい都道府県は？", "photo": null, "choices": ["香川県", "大阪府", "東京都", "沖縄県"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "大阪府の人口は、47都道府県で多いほうから何番目？（2026年10月時点）", "photo": null, "choices": ["1番目", "2番目", "5番目", "3番目"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "大阪・関西万博の会場になった人工島は？", "photo": null, "choices": ["咲洲（さきしま）", "舞洲（まいしま）", "夢洲（ゆめしま）", "六甲アイランド"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "道頓堀の「くいだおれ太郎」が持っている楽器は？", "photo": null, "choices": ["ラッパ", "太鼓", "三味線", "シンバル"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "通天閣のビリケンさん。どこをなでると御利益がある？", "photo": null, "choices": ["足の裏", "頭", "おなか", "ほっぺ"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "大阪で最初に開業した地下鉄の路線は？", "photo": null, "choices": ["谷町線", "堺筋線", "中央線", "御堂筋線"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "大阪のエスカレーター。立ち止まる人が多いのはどっち側？", "photo": null, "choices": ["左側", "真ん中", "右側", "決まっていない"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "大阪城を築いた人物は？", "photo": null, "choices": ["織田信長", "豊臣秀吉", "徳川家康", "明智光秀"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "会話の中で、相手の会社をうやまって言う言葉は？", "photo": null, "choices": ["御社", "弊社", "当社", "本社"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "お願いごとの前に添えて、言い方をやわらかくする「クッション言葉」はどれ？", "photo": null, "choices": ["「ちなみに」", "「ぶっちゃけ」", "「なんなら」", "「恐れ入りますが」"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "電話で相手の声が聞き取りにくいとき、ていねいな言い方は？", "photo": null, "choices": ["「声が小さいです」", "「もっと大きな声でお願いします」", "「お電話が少し遠いようです」", "「何て言いました？」"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "報告で大事な「5W1H」。最後の「H」は何？", "photo": null, "choices": ["Here（ここで）", "How（どのように）", "Hope（のぞみ）", "Help（たすけ）"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "仕事に遅刻しそうなとき、連絡はいつする？", "photo": null, "choices": ["遅れるとわかった時点ですぐ", "会社に着いてから", "始業時刻を過ぎてから", "お昼休みに"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "「目処が立つ」。「目処」の読みは？", "photo": null, "choices": ["もくしょ", "めどころ", "もくど", "めど"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "「〆切」の読みは？", "photo": null, "choices": ["かんきり", "ばつきり", "しめきり", "しめいり"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「蛙化現象」の、いまの使われ方は？", "photo": null, "choices": ["急に人見知りになること", "好きな人のちょっとした言動で気持ちが冷めること", "同じ場所から動きたくなくなること", "朝なかなか起きられなくなること"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "書類に「押印」をお願いします。「押印」の読みは？", "photo": null, "choices": ["おういん", "おしいん", "こういん", "あついん"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "「急がば〇〇」。〇〇に入るのは？", "photo": null, "choices": ["走れ", "止まれ", "休め", "回れ"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "「カステラ」を日本に伝えた国は？", "photo": null, "choices": ["オランダ", "スペイン", "ポルトガル", "イタリア"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "「ナポリタン」が生まれた国は？", "photo": null, "choices": ["イタリア", "日本", "アメリカ", "フランス"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "農林水産省の分け方で、スイカは何に入る？", "photo": null, "choices": ["野菜", "果物", "ナッツ", "穀物"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "ドラえもんの大好物は？", "photo": null, "choices": ["たい焼き", "大福", "みたらし団子", "どら焼き"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "スーパーマリオの弟の名前は？", "photo": null, "choices": ["ワリオ", "ヨッシー", "ルイージ", "キノピオ"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "『ちびまる子ちゃん』の舞台になっている県は？", "photo": null, "choices": ["愛知県", "静岡県", "神奈川県", "千葉県"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "『進撃の巨人』の主人公は？", "photo": null, "choices": ["エレン・イェーガー", "リヴァイ", "アルミン・アルレルト", "ミカサ・アッカーマン"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "オリンピックの五輪マーク。一番左の輪の色は？", "photo": null, "choices": ["赤", "黄", "緑", "青"], "correct": 3, "limit": 20, "cat": "other"},
+      {"text": "今も営業を続けている遊園地で、日本で一番古いのは？", "photo": null, "choices": ["よみうりランド", "東京ディズニーランド", "ひらかたパーク", "ナガシマスパーランド"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "世界で一番面積が小さい国は？", "photo": null, "choices": ["モナコ", "バチカン市国", "サンマリノ", "リヒテンシュタイン"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "サッカーで、1人の選手が1試合で3点決めることを何という？", "photo": null, "choices": ["ターキー", "ハットトリック", "ホールインワン", "グランドスラム"], "correct": 1, "limit": 20, "cat": "other"}
     ] }
   ];
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1053,7 +1104,9 @@
     if (!q.choices[q.correct] || !q.choices[q.correct].trim()) return '正解を選んでください';
     return '';
   }
-  function blank() { return { text: '', photo: null, choices: ['', '', '', ''], correct: 0, limit: 20 }; }
+  function blank() { return { text: '', photo: null, choices: ['', '', '', ''], correct: 0, limit: 20, cat: 'other' }; }
+  var CATS = [['other', 'その他'], ['company', '会社'], ['staff', '社員']];
+  function catOf(q) { return q.cat === 'company' || q.cat === 'staff' ? q.cat : 'other'; }
 
   var saveTimer = null;
   function saveQ() { clearTimeout(saveTimer); saveTimer = setTimeout(function () { idbSet('questions', Q); }, 300); }
@@ -1070,7 +1123,7 @@
   var icur = 0;
   var introTimer = null;
   function saveIntro() { clearTimeout(introTimer); introTimer = setTimeout(function () { idbSet('intro', INTRO); }, 300); }
-  function fillIn(text) { return String(text).replace(/\{問題数\}/g, String(Q.filter(playable).length)); }
+  function fillIn(text) { return String(text).replace(/\{問題数\}/g, String(H.game && H.game.length ? H.game.length : buildGame().list.length)); }
 
   function renderIntroEditor() {
     var list = $('introList');
@@ -1137,7 +1190,7 @@
   $('introNext').addEventListener('click', function () {
     if (H.introAt < INTRO.length - 1) { showIntro(H.introAt + 1, introPreview); return; }
     if (introPreview) { renderIntroEditor(); show('hIntroEdit'); return; }
-    askQuestion();
+    nextStep();
   });
 
   $('toIntroEditBtn').addEventListener('click', function () { icur = 0; renderIntroEditor(); show('hIntroEdit'); });
@@ -1177,12 +1230,127 @@
     INTRO.splice(icur, 1); icur = Math.max(0, Math.min(icur, INTRO.length - 1)); saveIntro(); renderIntroEditor();
   });
 
+  // ----- how questions are served (optional detail settings) -----
+  var PLAY_DEFAULT = { order: 'random', group: 'mix', seq: ['staff', 'other', 'company'], count: 0, sections: true,
+    titles: { staff: '営業担当・SV編', other: '知識力試し編', company: 'FIDIA SOLUTIONS編' } };
+  var PLAY = clone(PLAY_DEFAULT);
+  var CAT_NAME = { staff: '社員', other: 'その他', company: '会社' };
+  function savePlay() { idbSet('play', PLAY); }
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+
+  // Builds today's order as indexes into Q, plus the genre breaks to show before some questions.
+  function buildGame() {
+    var idx = [];
+    Q.forEach(function (q, i) { if (playable(q)) idx.push(i); });
+    var others = idx.filter(function (i) { return catOf(Q[i]) === 'other'; });
+    if (PLAY.order !== 'keep') shuffle(others);
+    if (PLAY.count > 0 && PLAY.count < others.length) others = others.slice(0, PLAY.count);
+    var keepOther = {};
+    others.forEach(function (i) { keepOther[i] = true; });
+    idx = idx.filter(function (i) { return catOf(Q[i]) !== 'other' || keepOther[i]; });
+    var list, sections = {};
+    if (PLAY.group === 'group') {
+      list = [];
+      PLAY.seq.forEach(function (cat) {
+        var part = cat === 'other' ? others : idx.filter(function (i) { return catOf(Q[i]) === cat; });
+        if (cat !== 'other' && PLAY.order === 'random') part = shuffle(part.slice());
+        if (!part.length) return;
+        if (PLAY.sections) sections[list.length] = cat;
+        list = list.concat(part);
+      });
+    } else if (PLAY.order === 'random') {
+      list = shuffle(idx.slice());
+    } else if (PLAY.order === 'others') {
+      // company / staff questions stay where they are; the other questions are shuffled into the remaining slots
+      var queue = others.slice();
+      list = idx.map(function (i) { return catOf(Q[i]) === 'other' ? queue.shift() : i; });
+    } else {
+      list = idx;
+    }
+    return { list: list, sections: sections };
+  }
+
+  function playSummary() {
+    var n = buildGame().list.length;
+    if (PLAY.order === 'random' && PLAY.group === 'mix' && !PLAY.count) return 'おまかせ：全ジャンルをまぜてランダムに出題（' + n + '問）';
+    var parts = [];
+    parts.push({ random: 'すべてランダム', others: 'その他の問題だけランダム', keep: '追加した順のまま' }[PLAY.order]);
+    parts.push(PLAY.group === 'group' ? 'ジャンルごと（' + PLAY.seq.map(function (c) { return CAT_NAME[c]; }).join('→') + '）' : 'ジャンルはまぜる');
+    if (PLAY.count) parts.push('その他は' + PLAY.count + '問');
+    return '詳細設定：' + parts.join('・') + '（' + n + '問）';
+  }
+
+  function renderPlay() {
+    var counts = { staff: 0, other: 0, company: 0 };
+    Q.forEach(function (q) { if (playable(q)) counts[catOf(q)]++; });
+    function chips(box, items, current, onPick) {
+      box.textContent = '';
+      items.forEach(function (it) {
+        var b = el('button', 'chip', it[1]);
+        b.type = 'button';
+        b.setAttribute('aria-pressed', String(current === it[0]));
+        b.addEventListener('click', function () { onPick(it[0]); savePlay(); renderPlay(); });
+        box.appendChild(b);
+      });
+    }
+    chips($('pOrder'), [['random', 'すべてランダム'], ['others', '会社・社員は順番どおり、その他だけランダム'], ['keep', '追加した順のまま']], PLAY.order, function (v) { PLAY.order = v; });
+    chips($('pGroup'), [['mix', 'まぜて出す'], ['group', 'ジャンルごとにまとめて出す']], PLAY.group, function (v) { PLAY.group = v; });
+    var counts2 = [[0, '全部（' + counts.other + '問）']];
+    for (var n = 5; n < counts.other; n += 5) counts2.push([n, n + '問']);
+    if (PLAY.count >= counts.other) PLAY.count = 0;
+    chips($('pCount'), counts2, PLAY.count, function (v) { PLAY.count = v; });
+
+    var grouped = PLAY.group === 'group';
+    $('pSeqField').hidden = !grouped;
+    $('pSecField').hidden = !grouped;
+    var seq = $('pSeq');
+    seq.textContent = '';
+    PLAY.seq.forEach(function (cat, k) {
+      var lab = el('label', 'field-title', (k + 1) + '番目 ');
+      var sel = document.createElement('select');
+      sel.setAttribute('aria-label', (k + 1) + '番目のジャンル');
+      ['staff', 'other', 'company'].forEach(function (c) {
+        var o = el('option', '', CAT_NAME[c] + '（' + counts[c] + '問）');
+        o.value = c;
+        o.selected = c === cat;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', function () {
+        var j = PLAY.seq.indexOf(sel.value);   // swap so every genre appears once
+        PLAY.seq[j] = PLAY.seq[k];
+        PLAY.seq[k] = sel.value;
+        savePlay(); renderPlay();
+      });
+      lab.appendChild(sel);
+      seq.appendChild(lab);
+    });
+    $('pSecOn').checked = !!PLAY.sections;
+    var titles = $('pSecTitles');
+    titles.textContent = '';
+    ['staff', 'other', 'company'].forEach(function (c) {
+      titles.appendChild(el('span', 'field-title', CAT_NAME[c]));
+      var inp = el('input', 'text-input');
+      inp.type = 'text';
+      inp.value = PLAY.titles[c];
+      inp.setAttribute('aria-label', CAT_NAME[c] + 'の区切り画面のタイトル');
+      inp.addEventListener('input', function () { PLAY.titles[c] = inp.value; savePlay(); });
+      titles.appendChild(inp);
+    });
+    $('playSummary').textContent = playSummary();
+  }
+  $('pSecOn').addEventListener('change', function () { PLAY.sections = $('pSecOn').checked; savePlay(); });
+  $('pReset').addEventListener('click', function () { PLAY = clone(PLAY_DEFAULT); savePlay(); renderPlay(); });
+
   function renderHome() {
     $('introCount').textContent = INTRO.length + '枚';
     var ok = Q.filter(playable).length;
     $('homeCount').textContent = ok + '問';
     $('homeCountNote').textContent = Q.length > ok ? '未完成の問題が' + (Q.length - ok) + '問あります（出題されません）' : (Q.length ? 'すべて出題できます' : '「問題をつくる・なおす」から問題集を選んでください');
     $('createBtn').disabled = ok === 0;
+    renderPlay();
   }
 
   // ----- editor -----
@@ -1286,6 +1454,15 @@
       b.addEventListener('click', function () { q.limit = s; saveQ(); renderEditor(); });
       lc.appendChild(b);
     });
+    var fc = $('fCat');
+    fc.textContent = '';
+    CATS.forEach(function (c) {
+      var b = el('button', 'chip', c[1]);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(catOf(q) === c[0]));
+      b.addEventListener('click', function () { q.cat = c[0]; saveQ(); renderEditor(); });
+      fc.appendChild(b);
+    });
     $('upBtn').disabled = cur === 0;
     $('downBtn').disabled = cur === Q.length - 1;
     delArmed = false;
@@ -1326,7 +1503,7 @@
   $('addQBtn').addEventListener('click', function () { Q.push(blank()); cur = Q.length - 1; saveQ(); renderEditor(); $('fText').focus(); });
   // ----- company-only questions: encrypted in the page, opened with a password -----
   // Made with PBKDF2(SHA-256) + AES-GCM. The plain questions never go into this repository.
-  var PRIVATE_BUNDLE = {"salt":"8J-oBuhfWtVHacoH9Xpf3A","iv":"GVeemaqRQ2j0pcgX","iter":600000,"data":"o8KnFM0LekR4cBHXZJBgEltHZPSkAGJ49PTbEU3dd-TFNa-Kl8A6xEN2BML-KTfB19HOlxvsm2ji3AkLl2VVbsfir_WsShH1gLMvuIVFkvbAcNCS4Te9c8Rmmq3LzrJeeHer7uGya2XMZxuFsIhX7W3gx8HnE_zlMW7ajB7xc3M6g9GRFmHqy02UZ34zkDqBe_GF0ysBo1vbXx1yAjRIb7jg6fiwurGVdWPu8pWVLSyvuvzvlg2pvzzryZ76-4skGihmuP-71YIlk4QzVGralQFczY-D-NL-tmJjc4lUbqSo7nf_N1-cQXoJUVbf0R58-o7of_8UhnkLpHKRU7Tfy19cYRyNPXEUr8p0PJ8jkTyxgAEId6AKcrHN4GCb8OtQkGGGaslBrHWuCSsJbjel-MmrI4DngXSP1LygDp9fXNLqWf28PItR-rY0ih3ghlHBLnJ3gd39rLxt-whjvv4cmn1kYeDNWueLajLuGcf0sHa5wp3e2Llbx_jznl8lcZ1b-oOnuar7VX8Xj7595cdsDycCELb4saL3paNyFRCni9-4UE9nRPM_qvFcymfs5fNXAtrKmeRV7__LGURu_X9-02Ip9vSHWLrI9DkldfdMl3xzs7MAx3DUbAkbJ4_IueVOxFEDgaUPE8l5PbITg0OMVuU24GxuKxKQNkw7Riq0aWMtyV7VC1kOYwQSGtBQXI1xeYDaTJjhznOWTsC2dseniojoHVXcidtVvnPQHwFTEZB-3xblbmQ5sgn8uYjdnjg-CPIw4VzCj8Gf0fz45fU6IMKEdsFsJiZCqRw5mHZ4I318cSiq3d3R1thPnZwq-4fTsyX5anYx_Kr-C3K2QoiDVMH-HSrhRbGYebdysf_Pa82ILcSuAVwC8aRGoxFcAEMy68632AlqTAXoR2B5j3AHHSt6btljWmuumZakB0Ak-22U-7XH73xa5AOQyiWZS9DoI1MZbw88nyjZumbDXtHOV9EkVXdXOOnSCSePqoaVXJnaZ0qzj1yxAFh0KMJsyeK1DQRragFau2Kukge1fSlKlQ3PsB8--skJctkGEaxle50z14PNGC9lFuAcwMMqVidTFv6xph9gsxEScuYzkFDB_DwRWuw7cPkhJKe3T3XcEWtcaPDpvUxrKlWcgl3aBlWc0aTTHG7cx3fk9p_lsxECIi8mvJFEK3NyOA3opo9FO1iK8HVocvNbRndjwtvJGZ0vsmpQ4b9r1GBRY4-PVEodEr6scE_4-Txa7lOCoJUXUqDCe6UnWkSttjDmH9Jemtqqyn2bOcHLhIKAOZFEn-BFm02pRN3mHnu6T0pm2EuLYyj7sJe1nXMdjGeH8KlvpMzXlsI-skvwShRPuYvyaaT9KevJKQh5SlYJQ5QsW3DJqivl_GbuQEo0uAOGx0v7cu9DHXHjg49BIhuaXO70EWwM23unpTKIAMwI2m3LPgOaMDJIl8g-4P-PQGPxElg_7i_R6VdfCPatStawM_uA1e5nNjzBzCHSZYqCeIFyR8mSjbA_MGf32V38TaCLoyjXJ52rlfKWjADrei_YjHJR94MMAuAlxUktXZsxiN81utubY7fElBldshFuIlzmdRI7hRDUnYch_YneinSmUoBnVc1TtowyByiRaHRv3VG1QCLF9UE8WaFB0TCtuinIgNd7SQVi5HsqX-HOSIG7boQehztPUW2o2ZCTwcebHnF8onUQxUFxPWmapMobPirxdcgL9JDFzCFvObV_vBowZy-Kmfw8H-FnoT_OQL45Pdyq8Z6hjblMe7nQ86KrhjOJuDreenhFvvFn-yVFke772LseUOSyZnuPT9wN59xU2rPXOrB6j3KKYFmKY8djZX2ukVxjl4N2N8e5LZVuDZNUooL2CitYiLGEpOJbRVMPfHc-xwmXL997z93Gp4EEgspIT0N1gb3CHMDMWpma9Ch8NuuPfnegQtv-SRoucq7-SjOLQuPEIzcmgV7TBPZcM701AMPPEdW47ihQuosh-eNpe0oMLoBYlhejlIVdrcdx0LlVoS_hSlapnxpg4m38D9bC93vm4E49afJF7j3tQV7WhXcHaTluFx2WvP6X8troNitoYLRE-yqGYS1xhiRm_L1DIY9DFshBbpa1gY-qxOoDiiOr4zvEWJrvch8zvvBtpPmdguMrH9e2RalMe5wRZVqUpY1_n0fS3uTnPWTk-y-TrIl2ZDV7yUSARnH5UZtUTo9EuYq02TR33JtdUrANtEhXbyq5lKbCavPBOCnzX3HL98_jkeGvw6YipF1UfOYOi44x3iw8gOsQ-i0hYZhYKX8bOCTc7wfTkZS4p1EawDc4_7-HC-KeA2oSaWhmM8uttf021xX6mWaPGgTzG0SX61yKkcl2GVOPZyBEz9Cqg264wjIwh_fQpqjWqsmdHrhc7-X36psQUFjEIxUs2bBlVS4FjzLLAOhgK9Gwv8MVbVQVxzaXHj_otJyeSt-oAIbQsvCh47Qlh2PUSB1T1PpgQAVfKUWPsOrw612Iio8SYdDmFhQKt6DkT48ZMQOgNcBGm5JkElf89ehdlFg6f-A4T-6g3HDjFGOwMt5u8JpnVGDH9ZnKy8lLDpqvJO07A0aGRZyimdMuSSltW25GtVk4tL0qnbTah1FcTjHFOBeqkDMkhofve0EtF-fQnuQjWxI6w7NLYHCJPxUgUNyuTlBYUnIbQdiI_p6aM7eZ_XlnLm1lKdf386lH0pdUfraEqPlDFu62jSPoL6ph9-nQ9pqeCJAjiVS6bK1z9oHUvNlcYs8pV7g1TYMlzy8La12xz-S8sSEHBCewfiw6qogFs7CF2AAk1KTpwdzi8OXDHdFnyRfHJAqFfwUii_nhODus8lqfdy6ZoycyCfVs7vgkBd5uHgat491YzXh6NX01A8JJ3lcAxsCPcoebo2fx3jgt9GbYbeuCk_dSUZzcOdy9qmW_CEHSruo5UZLB-rHtabbnwDxQ0CVnL9WVVY-0VYHXSkDTwFdsZETFiwN2XTfUdq-fUWYClEONreoXshSxVOJaxnInQcDDcCv9pby4iXZyR6xVOG1UQ66If9zLNTddE0k3XOiTEfJWC_OmSf0jEsam-v3q-jglzENRESseXOdzcd_PdhiMsUAozNcut4Jy7j6wTszWWSrNJ5hJATECOQ3ihO3k6Y-GjpxsqjMyA6rTuHElHKawlOtOEJDfN97fosv2Zm8aYRel0aXslnCjmiggrXL3OaBOs9yTaaaW5DcSdg2eghZLCHRfwbY2do8CM5D6Qrc7YHlA8LaBzC1y-ffLuBuQWThYTe4A9V2NpFpaTjKjgbMnmwFHp34uLV_DNRkaDOJZaJwkXTOrUR5gCV8A698W69ga-CIO93MPhm5vsCFmJBoirIEX1RbCFS4LLYhzNKi80k3RpHnUKtixkdD0h0ocp1Nf2JJ7sAtxMqKoUvAKKqflqKofR0IPcK1c6HCOyWrhaItZQTrTDiL8jVnq5Oz-LvLBvv2CHnJJT8GushjGFAqDmgXTK6z7PRtOQSLV6Q0ZLywE1tW4zjBAARLmGSSwCUTFF3KXRC-3onOKChQmb0ADwq3Cv5QraruQ4a_QUjOs8EZoVuV2WtH4pZVzJnAQ-eWwAiyyCQcqqrTj59GkbrLM6-KkssOvDidAcZ99I3EjuHWOKZJ49q8jZZ3jmKSgsiZnYkNtDhpyeA3UCriti5ZhGD3ugG1hygwH3-vLH_tppMonUK3ee4h7sGmSvEYYk5Cs6Hw1jf3YXZ1t8729HWlnInDWoAIu7j-b8Tj3ZEM_uz57m2le3-k7duBAQ9d_Y9oA8XNrF-_Y8dnkx7mCXxT6LW81B_Sb9AxirzLfBORfv7sJ2CHQTh1hOBkc29w"};
+  var PRIVATE_BUNDLE = {"salt":"ilUebAaVsgjHir9ynceckQ","iv":"d-R4d2y9uB6SrV69","iter":600000,"data":"ibFNYMNNppGjpYsei1qo-oygQdvnQkCFCKg_5aixNyTjeodJ_9AVRTpn4b3CosMWpTQUC34w_6Eq58CuDtER2dZYKjIqHU7GfM8K3-nMhifH7oQUQkrfgO0tA1O-DnP9hkRF5_OBZ-4p9hA77jnfuRX5SZbB-GxNqiSI4RlzK9iNi4GF6WIA9KTF6SLQx0aPedZa6IBtwi7K5QweIqX0YW5bMkcK6aYQgP__7phO8HCuWLQOkpx62g_wkRkhIbwVwH1CGOnbQXKc9DO1UXlQWfzufh_ru10DfBT5dAnwhip0m7xarWtjXbiQ7EdRdWuxzhfkoABWEb-0TE-acaIht4J-eArcnFtuUU6jmQ7-kSUctgTcYgv2oR7QKIs-vUiZoZhLPPLF1AUleiAYa6-_bC9LPDjjAX1Du-xQ7Aw2RTArkdrRf2EbzaTjJS19rgNVIhWjlg6c0_ht5A2Q3n2Lp0yeYntjxnepL89PcnY6KZViOoiEmW4FrU6ot0C_bGRCgiLOmoSZYkKuwbKCE08eN9HPDU6kgn5keKGNNB3Kzxs6jmExwoJXn4V_oDd_EznmareMwfsCdbmNQuZvR1FOneDMUxlh_fCafdMfcHiHXzneJREbF4mKfujUjfeJETpxQceYpRNrZBpkGBJtSstQkJt6b8-SeO_CP3QUsZSlAg-jq-kflkJCuQhNMKspFiFv0Kop9cQ1Dw4io2fTAezZgzmj0jTjqJBats8lOpQG0ZEAtMAZDJjNLqOvPVymxwwu9i2ELXJhTVYC9MR9Xd5CrwiEqoBuG1ZTBt3nXh0nYl4J8H5vfhzorKROCTOM681CoyTbh9ra0JU5TZR941QAAHwjWlEs9jcgZrEYBOMtnJVMalgxt7VE571mub9HMtzSMJeM1wrUXjhZnoLI-2LlHYybuMxDt_CtfgKbxl8KLQn9mybMdWSMlpBosUy37_qA8m_9Ef__7oTZCoQlT4KfhJNz9MmQzPajkDAMGuk-6Bt20p6XCgKpwjzVyMfVW5DtSYazBlqYJdyq9WPy5eLAV3rQMNjF9XH2-dKVnS5Tl6QZLRWRyHSNLiLrrqDDD38bCo5_0zb88BgzgBX7pKC525K7Cg7IIK_vswyFUji65ycHDCZ-Rbj1fA_qukQt28aAwHtQs-IOH_iC79clzC877YzbB3cb99YkmpN7VmCHNy5tFH9vix6YuBq8sQ5nBFCRKXlvUQszGnBy3T6TNNOlDnAW1ynVirT8jPvEX8Xrw4S_te5NhAmOmEBAcNOzH53HDWhI8dsX4efm_ClDQJ8R2H5oOcqZVsHTL636rtk5iqVp5MIjt2AJ74Ma6uTbb5iVMK_6X4-LFEmqqbjonl4P2lUDMCVxrv5jVHFm5xQuT2l0XiCgK4cQeh8g7thc9bgDJaixHXbt0HmfM-xT4g35mGINbyVtS9q-2W_j4Djp_fjI8YJK2NivXNZns0vYcbk844JVpQi_GrMH3nUr-WwSh9zGgShl7swwJcjdrwwXP1iym9xcg2dK1W5QMad1HLhfNk18EJC2h_g995b96am9BLAQdCMiN6ICIEvBn7nc_WPbH5a4jHx92YZMb3851bzflZZjhRroYSR04ZxZ2yVfNskIRCOsCEdzP2MixeP-hn0TzfthFo2avAD7j2CH7haea2GhGpPpbv4jIH_ByBnF4GyBPrlnCmEi96pmX3DPbrNRYu2XuYtpyPx5HB816y8aH-mkItyCUr8btEkz3NEgRkLOOIYspHmrH9krWg_U7JoztpDz3i0hKp7QA0DLsikdfTMseiOsc1K8-U1UXTXIhXm2q-kQE26X2SszJjDR0cDY1m4dp5PS1WH8JYW1p5N5cC1YYODOqO5Odh3OowSExQXiJG5jVJemCF5QdyhlFocz4crj23mRNpOHrtPTFqBzmodLfV6cFiO8jOuKStyaM9pjtylBcjah7pO_KePLbczAvxRnE0zhWwZRV3syR-vVQ06-g_4VDDwV_sNuCiyYVXOPiWhm3UgaxRsa9TYZosiRh6gQ2Ip93XJA83cUTfg0fYz-ya8mHUGn9YS8oKB2xFPb_xQPX5nq6WMbQXzD5emsfFgcyVKCU5ZdLDbrpBVx6KJtWRal39h3slFZs4xvp_OU_cI1dllZ8Tcij3ZjIrhAb1A9Doce9kKwV1NAiWaBHOiovqfB9mHPG0xQFg6ROVP6bwtyRlfnj8TNmWElhOPhaWWDzFl2wlvsCE4X3t1OcSzLkjb5IwUn5GwuOaSuxLCD7J5LcTyZZokRevTzkvZG-xt0003QnElhIsFyuHbxdHXD8x5YeBztUYM9OZ1p6W1DqOSOmSBP9aKwqzeuYu_riUeXnFZiPmI6-pQDHI8BLd4_fb69xlZqcIzkk6n_4Zb5jmb38Vc1bz1YmHDx2Vt2HGpbo1oJ1VDaz4CjE0uLH2YYIafqkkDu6QjXX-EU44h-NcJiGQ5WT8e1qTNAn7zkElfXID54ZC_h74zA-_byyd0YMBe2EJbjZmv3rXDdADB71jjCLxHhgWv-KJOT5ShzvNJQ2ayQ7OvB3ksjltniSBXIca20AFM4Vs-DhE2cW_J9QW-0nft90wLYL5hTudk-a8wfgGRkHIQs1m5rw0APiQVjU0JTvSBcyyQeR0Kg6jznlIB4zR-X-uXV85evFh0Mf9mpxI-CSAe6XrE2xKFoRpsg0-9TbLUZQi472UI_d-36sBHC2QUwZ5fgaSGaKHuQMx4VdUfFT81_Jn0BnYX8IV2P9rUG9WCQ8K4mpdGOu7XDGx2o_TQJoHEeItTQK5XskmhHzP3ZeAFDxad2YPJzQpB-AXzoIlWcacqKvTtIsewJeFKjBIepyCSZMj-863PRxTebf0J8CCBNwChljpfADcy6wRY0pny_Err8MixermmLkQ_iGNZ_LxMXI1VfJvL_UX5cVZ-ozOJNf50c3z3MK5wzmGChm6XgrbjyoPiaeIvPzRVZPG1hrOxtj2rHimMFTZkqAzMdUownOwzn3v6gXKwiLxR8l53a9WNrwuNMA_2geq_AFuXNW1Y05U9RAnOP0XCTIltlbYHOIkt1lQnqTgNX1fvZJD5aWddILfZXkeMQp0UzxlyTgaikMeJDTgbSH0Io2LjW3L31P2Bm52vHyvD0PU4d0IV4rmDu4xLiuDRqHUppz2H-p_nHWZynB1I1uEi8B3G5Sv5Og60H5z0ur9KdY49roKsxx-lk7_wBkqg8QOJsxBEw-VGLCRMCmfXbi-9rH9uTFjg3rBj7wwMH7NSoVIjc-k9aCieq7uf8LDFvuC79epe2BAZd641SjO4Meno_ssrkugFCgg8hSdxWkFCVRSNaEwyHhfaYkcVnPHyZKtrKkBVCWuYPFsD3sWyzKk9c3tyX7RLPAPPfamnWxD7-994a3xy5w26ok-lME5E5rqxOCaDNf8e7w28HidnMONJQNx-6Rxwy8d2MM-yrHUeoIxGS8p9uOOsL8rGCYad9Z_ydmezLrY530T7PO1evJt5wWA2AVB-9-dEq0O8G1QCx47xzPpbbfRND2GA6aDTCbSLCLiSViJJxBespjS9AVScADgT7OAJL_FPsnMMHh4ld7bMA0dGdE1TcUb_15kfki1Bj5QU7aNxF1VtPvNG2aSOyWAReVRXbWiygqdCIfIw_XjxT_iw8etA2zVS3YMnTnPWsD76hd_cDtcXleEv277_VkZUigImpTWe3QJBMpty0UxoOGRoHWEHGCcAiFfwEFAqlvIXbkpBXkq5OpcWKbu03UbZpL1qDRP6o9gIzl-qCVCju_BpmlzA54Sn1K6zXUxdwtU03NUohYE5qA5zeqGFiCbDjbfIwA4lQgXoZnqLVovTSZebgiaGgluPDSwTkz544eHwYr_7MvhxfC9P_IfQedFoby0ZjH7P_X6_jZzqY6KzIxYQVumO8i7PNc6lqJPRC6Ivsnqe7iqVsvpABAuuYFx8fTMXyhQlWTlKcYFd8UH52eKVpQIKUkm8gfwgT8x0r2xkQZ14mDrYFwauvjnOboutJLluJP5KQe0cSWHOpjtnOXr1RCpWpnepQv9GzqErDNeWBy9yehu3HArdXj9MMNxN6EMAHn6308uDVXslOJc16j6gBd9ghuKwF4uQ1mmw"};
 
   function unlockPrivate(password) {
     if (!PRIVATE_BUNDLE) return Promise.reject(new Error('none'));
@@ -1349,7 +1526,7 @@
     var choices = (q.choices || []).slice(0, 4).map(String);
     while (choices.length < 4) choices.push('');
     return { text: String(q.text || ''), photo: typeof q.photo === 'string' && q.photo.indexOf('data:image/') === 0 ? q.photo : null,
-      choices: choices, correct: Math.max(0, Math.min(3, q.correct | 0)), limit: LIMITS.indexOf(q.limit) >= 0 ? q.limit : 20 };
+      choices: choices, correct: Math.max(0, Math.min(3, q.correct | 0)), limit: LIMITS.indexOf(q.limit) >= 0 ? q.limit : 20, cat: catOf(q) };
   }
 
   function renderSets() {
@@ -1522,7 +1699,7 @@
           var choices = q.choices.slice(0, 4).map(String);
           while (choices.length < 4) choices.push('');
           return { text: String(q.text || ''), photo: typeof q.photo === 'string' && q.photo.indexOf('data:image/') === 0 ? q.photo : null,
-            choices: choices, correct: Math.max(0, Math.min(3, q.correct | 0)), limit: LIMITS.indexOf(q.limit) >= 0 ? q.limit : 20 };
+            choices: choices, correct: Math.max(0, Math.min(3, q.correct | 0)), limit: LIMITS.indexOf(q.limit) >= 0 ? q.limit : 20, cat: catOf(q) };
         });
         if (!list.length) throw new Error('empty');
         // drop untouched blank questions so an import into an empty editor leaves no stray item
@@ -1549,7 +1726,7 @@
   function saveHost() {
     try {
       sessionStorage.setItem(HOST_KEY, JSON.stringify({ broker: H.broker, room: H.room, key: H.key,
-        players: H.players, order: H.order, qi: H.qi, phase: H.phase }));
+        players: H.players, order: H.order, qi: H.qi, phase: H.phase, gameIdx: H.gameIdx, sections: H.sections, secShown: H.secShown }));
     } catch (e) { /* resume is a convenience */ }
   }
   function joinUrl() { return location.href.split('#')[0].split('?')[0] + '?join=' + H.room + '&b=' + H.broker + '#' + H.key; }
@@ -1778,11 +1955,35 @@
   }
 
   function startGame() {
-    H.game = Q.filter(playable);
+    var plan = buildGame();
+    H.gameIdx = plan.list;
+    H.game = plan.list.map(function (i) { return Q[i]; });
+    H.sections = plan.sections;
+    H.secShown = -1;
     H.qi = 0;
     resetScores();
-    if (INTRO.length) showIntro(0, false); else askQuestion();
+    if (INTRO.length) showIntro(0, false); else nextStep();
   }
+
+  // Before a question that opens a genre, show the genre break first.
+  function nextStep() {
+    var cat = H.sections && H.sections[H.qi];
+    if (cat && H.secShown !== H.qi) {
+      H.secShown = H.qi;
+      H.phase = 'section';
+      saveHost();
+      var title = PLAY.titles[cat] || CAT_NAME[cat];
+      send(H.client, topic('s'), { t: 'section', title: title }, true);
+      $('secTitle').textContent = title;
+      $('secSub').textContent = 'ここからは「' + title + '」の問題だよ！';
+      Music.play('lobby');
+      Music.sfx('question');
+      show('hSection');
+      return;
+    }
+    askQuestion();
+  }
+  $('secGo').addEventListener('click', askQuestion);
 
   $('createBtn').addEventListener('click', function () {
     Music.unlock();   // browsers only allow sound after a click
@@ -1794,7 +1995,7 @@
   $('startBtn').addEventListener('click', startGame);
   $('closeBtn').addEventListener('click', reveal);
   $('toBoardBtn').addEventListener('click', showBoard);
-  $('nextBtn').addEventListener('click', function () { H.qi++; askQuestion(); });
+  $('nextBtn').addEventListener('click', function () { H.qi++; nextStep(); });
   $('againBtn').addEventListener('click', function () { H.qi = -1; resetScores(); openLobby(); });
   $('finishBtn').addEventListener('click', function () {
     clearRoom();
@@ -1817,7 +2018,12 @@
   });
 
   function startHost() {
-    Promise.all([idbGet('questions'), idbGet('intro'), idbGet('localAdds'), idbGet('setName')]).then(function (got) {
+    Promise.all([idbGet('questions'), idbGet('intro'), idbGet('localAdds'), idbGet('setName'), idbGet('play')]).then(function (got) {
+      if (got[4] && typeof got[4] === 'object') {
+        PLAY = clone(PLAY_DEFAULT);
+        Object.keys(PLAY_DEFAULT).forEach(function (k) { if (got[4][k] !== undefined) PLAY[k] = got[4][k]; });
+        PLAY.titles = Object.assign(clone(PLAY_DEFAULT.titles), got[4].titles || {});
+      }
       var list = got[0];
       Q = Array.isArray(list) ? list : [];   // empty until a set is chosen or questions are written
       LOCAL_ADDS = got[2] && typeof got[2] === 'object' ? got[2] : {};
@@ -1826,14 +2032,18 @@
       INTRO = Array.isArray(got[1]) ? got[1] : [JSON.parse(JSON.stringify(RULE_SLIDE))];
       var saved = null;
       try { saved = JSON.parse(sessionStorage.getItem(HOST_KEY) || 'null'); } catch (e) { saved = null; }
-      if (saved && saved.room && saved.key && ['lobby', 'intro', 'question', 'reveal', 'board'].indexOf(saved.phase) >= 0) {
+      if (saved && saved.room && saved.key && ['lobby', 'intro', 'section', 'question', 'reveal', 'board'].indexOf(saved.phase) >= 0) {
         // The TV page was reloaded mid-game: rejoin the same room and continue from a safe point.
         H.room = saved.room; H.key = saved.key; H.broker = saved.broker | 0;
         H.players = saved.players || {}; H.order = saved.order || [];
-        H.game = Q.filter(playable); H.qi = saved.qi;
+        H.gameIdx = Array.isArray(saved.gameIdx) ? saved.gameIdx.filter(function (i) { return Q[i]; }) : [];
+        if (!H.gameIdx.length) H.gameIdx = buildGame().list;
+        H.game = H.gameIdx.map(function (i) { return Q[i]; });
+        H.sections = saved.sections || {}; H.secShown = saved.secShown == null ? -1 : saved.secShown; H.qi = saved.qi;
         hostConnect(function () {
           $('soundCtl').hidden = false;
-          if (saved.phase === 'intro') { if (INTRO.length) showIntro(0, false); else askQuestion(); return; }
+          if (saved.phase === 'intro') { if (INTRO.length) showIntro(0, false); else nextStep(); return; }
+          if (saved.phase === 'section') { H.secShown = -1; nextStep(); return; }
           if (saved.phase === 'lobby' || H.qi < 0) openLobby();
           else { if (saved.phase === 'question') H.qi = Math.max(0, H.qi - 1); H.prevScores = scoreMap(); showBoard(); }
         });
@@ -1863,6 +2073,7 @@
     if (!msg) { waitScreen('TVを見て待っててね', ''); return; }
     if (msg.t === 'lobby') waitScreen('TVを見て待っててね', 'まもなくはじまります（いま' + msg.n + '人）');
     else if (msg.t === 'intro') waitScreen('まもなくスタート！', 'TVの説明を見てね');
+    else if (msg.t === 'section') waitScreen('次は「' + msg.title + '」！', 'TVを見てね');
     else if (msg.t === 'q') {
       if (P.answeredN === msg.n) { waitScreen('回答しました！', 'みんなの回答を待っています'); return; }
       $('pQNo').textContent = 'Q' + (msg.n + 1) + ' / ' + msg.total;
