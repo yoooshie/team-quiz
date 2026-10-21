@@ -135,3 +135,30 @@
 | 32 | 「稟議」（りんぎ） | [コトバンク](https://kotobank.jp/word/稟議) |
 
 候補から外したもの：「進捗」「役不足」「社外への上司の呼び方」「大谷選手のMVP回数」「二重敬語」「北岳」「日本一高いビル」「国際線の利用者1位の空港」（1回目の案でご指摘）。「応接室の上座」（パート2で外した経緯）、「天下の台所」（江戸時代の呼び名ではなく明治以降の歴史家の言葉という研究がある）、「よろしかったでしょうか」（公的な根拠が見つからない）。
+
+## 正解発表で出す数字（2026年10月22日）
+
+ランキングや距離の問題は、正解発表のときに選択肢ごとの数字を出す（問題の `facts`）。数字が確かめられなかった選択肢には何も出さない。
+
+| パート | 問題 | 出す数字と根拠 |
+|---|---|---|
+| 1 | コンビニの店舗数 | 2026年3月末ごろ：セブン約2万2,000・ファミマ約1万6,400・ローソン約1万4,700・ミニストップ約1,800 [ヨムーノ](https://yomuno.jp/posts/137030)、[CREX](https://www.crex-data.com/industry/retail/convenience-store/chain-comparison) |
+| 1 | 2024年の外国人観光客 | UN Tourism：フランス1億200万・スペイン9,400万・アメリカ7,200万（イタリアは数字が見つからず空欄）[やまとごころ](https://yamatogokoro.jp/inbound_data/60374/) |
+| 1 | 2025年の訪日外国人 | 上の差しかえ表と同じ（JNTO推計） |
+| 1 | 島の数 | 長崎1,479・北海道1,473・鹿児島1,256・沖縄691 [国土地理院（都道府県別の表）](https://www.gsi.go.jp/kihonjohochousa/islands_index.html) |
+| 1 | ギョーザ購入額 | 浜松4,046円・宇都宮3,575円・宮崎3,418円（大阪市は上位3位に入らず数字なし）[浜松市 報道発表](https://www.city.hamamatsu.shizuoka.jp/documents/171826/0603.pdf) |
+| 1・3 | 国の面積 | ロシア約1,709万・カナダ約998万・アメリカ約983万・中国約960万・ブラジル約851万km² [キッズ外務省](https://www.mofa.go.jp/mofaj/kids/ranking/men_o.html) |
+| 1・3 | 都道府県の面積 | 令和7年7月1日：北海道83,422・岩手15,275・福島13,784・長野13,562・新潟12,584・沖縄2,282・東京2,200・大阪1,905・香川1,877km² [国土地理院 資料2](https://www.gsi.go.jp/KOKUJYOHO/MENCHO/backnumber/R7_07_siryo2.pdf) |
+| 2 | 都道府県の人口 | 令和7年国勢調査 速報：神奈川919万・大阪877万・愛知745万・埼玉729万 [埼玉県 統計ア・ラ・カルト](https://www.pref.saitama.lg.jp/a0206/toukeialacarte/231.html) |
+| 3 | 人口が少ない県 | 同上：鳥取52万・島根63万・高知64万。徳島は約68万（675,489人）[徳島県](https://www.pref.tokushima.lg.jp/statistics/month/jinkou/) |
+| 2 | 血液型 | 上のパート2の表と同じ |
+| 2 | 国の人口 | 世界人口白書2025：インド14億6,390万・中国14億1,610万・アメリカ3億4,730万・インドネシア2億8,570万 [エレミニスト](https://eleminist.com/article/4192) |
+| 2・3 | 名字 | 2026年4月時点：佐藤約178万・鈴木約173万・高橋約135万・田中約128万 [名字由来net](https://myoji-yurai.net/prefectureRanking.htm?pref=0) |
+| 2 | 市の人口 | 令和7年国勢調査 速報：横浜3,754,840 [横浜市](https://www.city.yokohama.lg.jp/city-info/yokohamashi/tokei-chosa/portal/kekka/kokusei/r7kokuchosokuho.html)・大阪2,808,624 [大阪市](https://www.city.osaka.lg.jp/hodoshiryo/toshikeikaku/0000675190.html)・名古屋2,345,892 [名古屋市](https://www.city.nagoya.jp/shisei/toukei/1003703/1003773/1003809/1049142/1049152.html)・札幌1,964,034 [e-citizen](https://ecitizen.jp/Statdb/StatsData/0004050397) |
+| 2 | 大阪駅からの距離 | 上のパート2の表と同じ（国土地理院の距離計算） |
+| 3 | 新幹線の最高速度 | はやぶさ320・みずほ300・のぞみ300（山陽区間。東海道区間は285）・かがやき260km/h [tabiris](https://shinkansen.tabiris.com/speed.html) |
+| 3 | 大阪府の市の人口 | 住民基本台帳 2024年1月1日：堺817,041・東大阪478,539・豊中406,836・枚方394,221 [枚方市資料](https://www.city.hirakata.osaka.jp/cmsfiles/contents/0000052/52291/02.12.pdf) |
+| 3 | 遊園地の開業年 | ひらかたパーク1912 [京阪電鉄](https://www.keihan.co.jp/k-press/event/202210-closeup.php)・よみうりランド1964 [よみうりランド](https://yomiuriland.co.jp/news/wp-content/uploads/2024/02/release_240219.pdf)・ナガシマスパーランド1966 [ニュースイッチ](https://newswitch.jp/p/16681)・東京ディズニーランド1983 [Forbes JAPAN](https://forbesjapan.com/articles/detail/46850) |
+| 3 | 国の面積（小さい国） | バチカン約0.44・モナコ約2・サンマリノ約61・リヒテンシュタイン約160km² [キッズ外務省](https://www.mofa.go.jp/mofaj/kids/ranking/men_s.html)、[エレミニスト](https://eleminist.com/article/1717?page=2) |
+
+数字を出していない問題：動画配信サービス（2026年の選択肢ごとの利用率が見つからない）、回転ずし（サーモン以外の割合が見つからない）、乗降客数世界一の駅・ファストフードの店舗数・母語の話者数（同じ基準でそろった数字が見つからない）。

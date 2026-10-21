@@ -189,6 +189,8 @@
   .ans.dim { opacity: 0.3; transform: scale(0.97); }
   .ans.right { outline: 6px solid var(--ink); outline-offset: 4px; }
   .ans .cnt { flex: none; padding: 2px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.92); color: var(--ink); font-size: 0.7em; font-variant-numeric: tabular-nums; }
+  .ans .fact { flex: none; padding: 2px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.92); color: var(--ink); font-size: 0.75em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .has-facts .ans.dim { opacity: 0.6; }
   .ans .ok-mark { position: absolute; top: -14px; right: -8px; padding: 2px 14px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 0.55em; }
 
   /* ---------- home ---------- */
@@ -259,6 +261,7 @@
   .choice-row .swatch svg { width: 22px; height: 22px; }
   .choice-row .swatch.s4 { color: var(--a4-ink); }
   .choice-row label.correct { display: inline-flex; align-items: center; gap: 4px; font-size: 0.85rem; font-weight: 800; white-space: nowrap; min-height: 44px; }
+  .choice-row .fact-input { grid-column: 3; min-height: 36px; font-size: 0.9rem; }
   .choice-row input[type="radio"] { width: 22px; height: 22px; accent-color: var(--leaf); }
 
   /* ---------- intro slides ---------- */
@@ -704,16 +707,16 @@
       {"text": "封筒の宛名に書く「御中」の読みは？", "photo": null, "choices": ["ごちゅう", "みなか", "おなか", "おんちゅう"], "correct": 3, "limit": 20, "cat": "other"},
       {"text": "電話の相手が名乗らないとき、ていねいな聞き方は？", "photo": null, "choices": ["「どなたですか」", "「お名前は何ですか」", "「失礼ですが、どちら様でしょうか」", "「誰からのお電話ですか」"], "correct": 2, "limit": 20, "cat": "other"},
       {"text": "ChatGPTをつくった会社は？", "photo": null, "choices": ["Google", "Apple", "Meta", "OpenAI"], "correct": 3, "limit": 20, "cat": "other"},
-      {"text": "日本で店舗数が一番多いコンビニは？", "photo": null, "choices": ["ファミリーマート", "ローソン", "セブン-イレブン", "ミニストップ"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "日本で店舗数が一番多いコンビニは？", "photo": null, "choices": ["ファミリーマート", "ローソン", "セブン-イレブン", "ミニストップ"], "correct": 2, "limit": 20, "cat": "other", "facts": ["約1万6,400店", "約1万4,700店", "約2万2,000店", "約1,800店"]},
       {"text": "大谷翔平選手が所属しているチームは？", "photo": null, "choices": ["ロサンゼルス・エンゼルス", "ロサンゼルス・ドジャース", "ニューヨーク・ヤンキース", "シカゴ・カブス"], "correct": 1, "limit": 20, "cat": "other"},
       {"text": "阪神甲子園球場があるのは何県？", "photo": null, "choices": ["大阪府", "兵庫県", "京都府", "奈良県"], "correct": 1, "limit": 20, "cat": "other"},
       {"text": "電話で伝言を受けたあと、最後に伝えると良い一言は？", "photo": null, "choices": ["「では、失礼します」", "「たぶん伝えておきます」", "「また電話してください」", "「わたくし〇〇が承りました」"], "correct": 3, "limit": 20, "cat": "other"},
       {"text": "2026年の冬季オリンピックの開催地は？", "photo": null, "choices": ["北京（中国）", "パリ（フランス）", "ミラノ・コルティナ（イタリア）", "ソルトレークシティ（アメリカ）"], "correct": 2, "limit": 20, "cat": "other"},
-      {"text": "2024年、外国人観光客が世界で一番多く訪れた国は？", "photo": null, "choices": ["フランス", "スペイン", "アメリカ", "イタリア"], "correct": 0, "limit": 20, "cat": "other"},
-      {"text": "2025年、日本を訪れた外国人が一番多かった国・地域は？", "photo": null, "choices": ["韓国", "中国", "台湾", "アメリカ"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "2024年、外国人観光客が世界で一番多く訪れた国は？", "photo": null, "choices": ["フランス", "スペイン", "アメリカ", "イタリア"], "correct": 0, "limit": 20, "cat": "other", "facts": ["約1億200万人", "約9,400万人", "約7,200万人", ""]},
+      {"text": "2025年、日本を訪れた外国人が一番多かった国・地域は？", "photo": null, "choices": ["韓国", "中国", "台湾", "アメリカ"], "correct": 0, "limit": 20, "cat": "other", "facts": ["約946万人", "約910万人", "約676万人", "約331万人"]},
       {"text": "2022年から、日本の成人年齢は何歳になった？", "photo": null, "choices": ["16歳", "20歳", "22歳", "18歳"], "correct": 3, "limit": 20, "cat": "other"},
-      {"text": "島の数が日本で一番多い都道府県は？", "photo": null, "choices": ["北海道", "鹿児島県", "長崎県", "沖縄県"], "correct": 2, "limit": 20, "cat": "other"},
-      {"text": "2025年、ギョーザにお金を一番使った街は？（総務省の家計調査）", "photo": null, "choices": ["宇都宮市", "浜松市", "宮崎市", "大阪市"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "島の数が日本で一番多い都道府県は？", "photo": null, "choices": ["北海道", "鹿児島県", "長崎県", "沖縄県"], "correct": 2, "limit": 20, "cat": "other", "facts": ["1,473島", "1,256島", "1,479島", "691島"]},
+      {"text": "2025年、ギョーザにお金を一番使った街は？（総務省の家計調査）", "photo": null, "choices": ["宇都宮市", "浜松市", "宮崎市", "大阪市"], "correct": 1, "limit": 20, "cat": "other", "facts": ["3,575円", "4,046円", "3,418円", ""]},
       {"text": "東京スカイツリーの高さは？", "photo": null, "choices": ["634m", "333m", "450m", "828m"], "correct": 0, "limit": 20, "cat": "other"},
       {"text": "大阪の地名「放出」の読みは？", "photo": null, "choices": ["ほうしゅつ", "はなだし", "ほうで", "はなてん"], "correct": 3, "limit": 20, "cat": "other"},
       {"text": "1970年の大阪万博のシンボル「太陽の塔」を作った芸術家は？", "photo": null, "choices": ["横尾忠則", "草間彌生", "岡本太郎", "手塚治虫"], "correct": 2, "limit": 20, "cat": "other"},
@@ -722,8 +725,8 @@
       {"text": "日本の人口はおよそ何人？", "photo": null, "choices": ["約8千万人", "約1億6千万人", "約2億人", "約1億2千万人"], "correct": 3, "limit": 20, "cat": "other"},
       {"text": "USJ（ユニバーサル・スタジオ・ジャパン）が開業したのは何年？", "photo": null, "choices": ["1995年", "2001年", "2005年", "2010年"], "correct": 1, "limit": 20, "cat": "other"},
       {"text": "「稟議」の読みは？", "photo": null, "choices": ["ひんぎ", "りんき", "ひんき", "りんぎ"], "correct": 3, "limit": 20, "cat": "other"},
-      {"text": "世界で一番面積が大きい国は？", "photo": null, "choices": ["カナダ", "アメリカ", "ロシア", "中国"], "correct": 2, "limit": 20, "cat": "other"},
-      {"text": "日本で面積が一番大きい都道府県は？", "photo": null, "choices": ["岩手県", "長野県", "北海道", "新潟県"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "世界で一番面積が大きい国は？", "photo": null, "choices": ["カナダ", "アメリカ", "ロシア", "中国"], "correct": 2, "limit": 20, "cat": "other", "facts": ["約998万km²", "約983万km²", "約1,709万km²", "約960万km²"]},
+      {"text": "日本で面積が一番大きい都道府県は？", "photo": null, "choices": ["岩手県", "長野県", "北海道", "新潟県"], "correct": 2, "limit": 20, "cat": "other", "facts": ["15,275km²", "13,562km²", "83,422km²", "12,584km²"]},
       {"text": "大阪・関西万博（2025年）の来場者数はおよそ何人？", "photo": null, "choices": ["約900万人", "約5,000万人", "約2,900万人", "約1億人"], "correct": 2, "limit": 20, "cat": "other"},
       {"text": "大阪・関西万博のシンボル「大屋根リング」。1周の長さはおよそ？", "photo": null, "choices": ["約500m", "約5km", "約2km", "約10km"], "correct": 2, "limit": 20, "cat": "other"},
       {"text": "電話に出るのが遅れてしまったとき、最初に言う言葉は？", "photo": null, "choices": ["「もしもし」", "「遅くなってすみません」", "「お待たせいたしました」", "「はい、どうぞ」"], "correct": 2, "limit": 20, "cat": "other"},
@@ -732,15 +735,15 @@
     { id: "part2", name: "標準問題集 パート2", questions: [
       {"text": "FIDIA SOLUTIONSの企業理念はどれ？", "photo": null, "choices": ["「人」が集まる 「未来」がひらく", "「働く」が楽しい 「毎日」がかわる", "「人」が輝く 「世界」がかわる", "「人」をつなぐ 「世界」をつなぐ"], "correct": 2, "limit": 20, "cat": "company"},
       {"text": "ミッション「『働く』を通して、人と企業の『〇〇』をゼロにする」。〇〇に入るのは？", "photo": null, "choices": ["できない", "ムダ", "不安", "ミスマッチ"], "correct": 0, "limit": 20, "cat": "company"},
-      {"text": "日本で人口が2番目に多い都道府県は？（2026年10月時点）", "photo": null, "choices": ["大阪府", "愛知県", "神奈川県", "埼玉県"], "correct": 2, "limit": 20, "cat": "other"},
-      {"text": "日本人に一番多い血液型は？", "photo": null, "choices": ["O型", "A型", "B型", "AB型"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "日本で人口が2番目に多い都道府県は？（2026年10月時点）", "photo": null, "choices": ["大阪府", "愛知県", "神奈川県", "埼玉県"], "correct": 2, "limit": 20, "cat": "other", "facts": ["約877万人", "約745万人", "約919万人", "約729万人"]},
+      {"text": "日本人に一番多い血液型は？", "photo": null, "choices": ["O型", "A型", "B型", "AB型"], "correct": 1, "limit": 20, "cat": "other", "facts": ["約30%", "約40%", "約20%", "約10%"]},
       {"text": "回転ずしで「よく食べるネタ」の1位は？（2026年10月時点の最新調査）", "photo": null, "choices": ["サーモン", "マグロ（赤身）", "ハマチ・ブリ", "えび"], "correct": 0, "limit": 20, "cat": "other"},
-      {"text": "世界で一番人口が多い国は？（2026年10月時点）", "photo": null, "choices": ["中国", "アメリカ", "インドネシア", "インド"], "correct": 3, "limit": 20, "cat": "other"},
-      {"text": "日本で2番目に多い名字は？（2026年10月時点）", "photo": null, "choices": ["佐藤", "高橋", "鈴木", "田中"], "correct": 2, "limit": 20, "cat": "other"},
-      {"text": "日本で人口が一番多い市は？（2026年10月時点）", "photo": null, "choices": ["大阪市", "横浜市", "名古屋市", "札幌市"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "世界で一番人口が多い国は？（2026年10月時点）", "photo": null, "choices": ["中国", "アメリカ", "インドネシア", "インド"], "correct": 3, "limit": 20, "cat": "other", "facts": ["約14億1,610万人", "約3億4,730万人", "約2億8,570万人", "約14億6,390万人"]},
+      {"text": "日本で2番目に多い名字は？（2026年10月時点）", "photo": null, "choices": ["佐藤", "高橋", "鈴木", "田中"], "correct": 2, "limit": 20, "cat": "other", "facts": ["約178万人", "約135万人", "約173万人", "約128万人"]},
+      {"text": "日本で人口が一番多い市は？（2026年10月時点）", "photo": null, "choices": ["大阪市", "横浜市", "名古屋市", "札幌市"], "correct": 1, "limit": 20, "cat": "other", "facts": ["約281万人", "約375万人", "約235万人", "約196万人"]},
       {"text": "1日に乗り降りする人の数が世界一の駅は？", "photo": null, "choices": ["新宿駅", "東京駅", "大阪（梅田）駅", "グランド・セントラル駅（ニューヨーク）"], "correct": 0, "limit": 20, "cat": "other"},
       {"text": "日本で店舗数が一番多いファストフードチェーンは？（2026年10月時点）", "photo": null, "choices": ["モスバーガー", "ケンタッキーフライドチキン", "ミスタードーナツ", "マクドナルド"], "correct": 3, "limit": 20, "cat": "other"},
-      {"text": "大阪駅から一番近いのはどこ？（直線距離）", "photo": null, "choices": ["伊丹空港", "万博記念公園", "USJ（ユニバーサル・スタジオ・ジャパン）", "関西国際空港"], "correct": 2, "limit": 20, "cat": "other"},
+      {"text": "大阪駅から一番近いのはどこ？（直線距離）", "photo": null, "choices": ["伊丹空港", "万博記念公園", "USJ（ユニバーサル・スタジオ・ジャパン）", "関西国際空港"], "correct": 2, "limit": 20, "cat": "other", "facts": ["約10.6km", "約12.3km", "約7.1km", "約37.6km"]},
       {"text": "大阪府の面積は、47都道府県で小さいほうから何番目？", "photo": null, "choices": ["1番目", "2番目", "5番目", "10番目"], "correct": 1, "limit": 20, "cat": "other"},
       {"text": "あべのハルカスの高さは？", "photo": null, "choices": ["300m", "250m", "333m", "634m"], "correct": 0, "limit": 20, "cat": "other"},
       {"text": "「京の着倒れ、大阪の〇〇倒れ」。〇〇に入るのは？", "photo": null, "choices": ["飲み", "寝", "笑い", "食い"], "correct": 3, "limit": 20, "cat": "other"},
@@ -772,14 +775,14 @@
     { id: "part3", name: "標準問題集 パート3", questions: [
       {"text": "FIDIA SOLUTIONSの企業理念はどれ？", "photo": null, "choices": ["「人」が集まる 「未来」がひらく", "「働く」が楽しい 「毎日」がかわる", "「人」をつなぐ 「世界」をつなぐ", "「人」が輝く 「世界」がかわる"], "correct": 3, "limit": 20, "cat": "company"},
       {"text": "ミッション「『働く』を通して、人と企業の『〇〇』をゼロにする」。〇〇に入るのは？", "photo": null, "choices": ["ムダ", "できない", "不安", "ミスマッチ"], "correct": 1, "limit": 20, "cat": "company"},
-      {"text": "日本で面積が2番目に大きい都道府県は？", "photo": null, "choices": ["福島県", "長野県", "新潟県", "岩手県"], "correct": 3, "limit": 20, "cat": "other"},
-      {"text": "日本で人口が一番少ない都道府県は？（2026年10月時点）", "photo": null, "choices": ["島根県", "高知県", "鳥取県", "徳島県"], "correct": 2, "limit": 20, "cat": "other"},
-      {"text": "世界で面積が2番目に大きい国は？", "photo": null, "choices": ["アメリカ", "カナダ", "中国", "ブラジル"], "correct": 1, "limit": 20, "cat": "other"},
-      {"text": "日本で一番多い名字は？（2026年10月時点）", "photo": null, "choices": ["佐藤", "鈴木", "高橋", "田中"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "日本で面積が2番目に大きい都道府県は？", "photo": null, "choices": ["福島県", "長野県", "新潟県", "岩手県"], "correct": 3, "limit": 20, "cat": "other", "facts": ["13,784km²", "13,562km²", "12,584km²", "15,275km²"]},
+      {"text": "日本で人口が一番少ない都道府県は？（2026年10月時点）", "photo": null, "choices": ["島根県", "高知県", "鳥取県", "徳島県"], "correct": 2, "limit": 20, "cat": "other", "facts": ["約63万人", "約64万人", "約52万人", "約68万人"]},
+      {"text": "世界で面積が2番目に大きい国は？", "photo": null, "choices": ["アメリカ", "カナダ", "中国", "ブラジル"], "correct": 1, "limit": 20, "cat": "other", "facts": ["約983万km²", "約998万km²", "約960万km²", "約851万km²"]},
+      {"text": "日本で一番多い名字は？（2026年10月時点）", "photo": null, "choices": ["佐藤", "鈴木", "高橋", "田中"], "correct": 0, "limit": 20, "cat": "other", "facts": ["約178万人", "約173万人", "約135万人", "約128万人"]},
       {"text": "母語として話す人が世界で一番多い言語は？（2026年10月時点）", "photo": null, "choices": ["英語", "スペイン語", "ヒンディー語", "中国語"], "correct": 3, "limit": 20, "cat": "other"},
-      {"text": "一番速く走る新幹線は？（2026年10月時点）", "photo": null, "choices": ["のぞみ", "みずほ", "はやぶさ（時速320km）", "かがやき"], "correct": 2, "limit": 20, "cat": "other"},
-      {"text": "大阪府で人口が2番目に多い市は？（2026年10月時点）", "photo": null, "choices": ["東大阪市", "堺市", "豊中市", "枚方市"], "correct": 1, "limit": 20, "cat": "other"},
-      {"text": "日本で面積が一番小さい都道府県は？", "photo": null, "choices": ["香川県", "大阪府", "東京都", "沖縄県"], "correct": 0, "limit": 20, "cat": "other"},
+      {"text": "一番速く走る新幹線は？（2026年10月時点）", "photo": null, "choices": ["のぞみ", "みずほ", "はやぶさ（時速320km）", "かがやき"], "correct": 2, "limit": 20, "cat": "other", "facts": ["最高 時速300km", "最高 時速300km", "最高 時速320km", "最高 時速260km"]},
+      {"text": "大阪府で人口が2番目に多い市は？（2026年10月時点）", "photo": null, "choices": ["東大阪市", "堺市", "豊中市", "枚方市"], "correct": 1, "limit": 20, "cat": "other", "facts": ["約47.9万人", "約81.7万人", "約40.7万人", "約39.4万人"]},
+      {"text": "日本で面積が一番小さい都道府県は？", "photo": null, "choices": ["香川県", "大阪府", "東京都", "沖縄県"], "correct": 0, "limit": 20, "cat": "other", "facts": ["1,877km²", "1,905km²", "2,200km²", "2,282km²"]},
       {"text": "大阪府の人口は、47都道府県で多いほうから何番目？（2026年10月時点）", "photo": null, "choices": ["1番目", "2番目", "5番目", "3番目"], "correct": 3, "limit": 20, "cat": "other"},
       {"text": "大阪・関西万博の会場になった人工島は？", "photo": null, "choices": ["咲洲（さきしま）", "舞洲（まいしま）", "夢洲（ゆめしま）", "六甲アイランド"], "correct": 2, "limit": 20, "cat": "other"},
       {"text": "道頓堀の「くいだおれ太郎」が持っている楽器は？", "photo": null, "choices": ["ラッパ", "太鼓", "三味線", "シンバル"], "correct": 1, "limit": 20, "cat": "other"},
@@ -805,8 +808,8 @@
       {"text": "『ちびまる子ちゃん』の舞台になっている県は？", "photo": null, "choices": ["愛知県", "静岡県", "神奈川県", "千葉県"], "correct": 1, "limit": 20, "cat": "other"},
       {"text": "『進撃の巨人』の主人公は？", "photo": null, "choices": ["エレン・イェーガー", "リヴァイ", "アルミン・アルレルト", "ミカサ・アッカーマン"], "correct": 0, "limit": 20, "cat": "other"},
       {"text": "オリンピックの五輪マーク。一番左の輪の色は？", "photo": null, "choices": ["赤", "黄", "緑", "青"], "correct": 3, "limit": 20, "cat": "other"},
-      {"text": "今も営業を続けている遊園地で、日本で一番古いのは？", "photo": null, "choices": ["よみうりランド", "東京ディズニーランド", "ひらかたパーク", "ナガシマスパーランド"], "correct": 2, "limit": 20, "cat": "other"},
-      {"text": "世界で一番面積が小さい国は？", "photo": null, "choices": ["モナコ", "バチカン市国", "サンマリノ", "リヒテンシュタイン"], "correct": 1, "limit": 20, "cat": "other"},
+      {"text": "今も営業を続けている遊園地で、日本で一番古いのは？", "photo": null, "choices": ["よみうりランド", "東京ディズニーランド", "ひらかたパーク", "ナガシマスパーランド"], "correct": 2, "limit": 20, "cat": "other", "facts": ["1964年〜", "1983年〜", "1912年〜", "1966年〜"]},
+      {"text": "世界で一番面積が小さい国は？", "photo": null, "choices": ["モナコ", "バチカン市国", "サンマリノ", "リヒテンシュタイン"], "correct": 1, "limit": 20, "cat": "other", "facts": ["約2km²", "約0.44km²", "約61km²", "約160km²"]},
       {"text": "サッカーで、1人の選手が1試合で3点決めることを何という？", "photo": null, "choices": ["ターキー", "ハットトリック", "ホールインワン", "グランドスラム"], "correct": 1, "limit": 20, "cat": "other"}
     ] }
   ];
@@ -1447,7 +1450,13 @@
       inp.placeholder = '選択肢' + (i + 1) + (i >= 2 ? '（なくてもOK）' : '');
       inp.setAttribute('aria-label', '選択肢' + (i + 1));
       inp.addEventListener('input', function () { q.choices[i] = inp.value; saveQ(); renderListSoon(); });
-      row.appendChild(sw); row.appendChild(lab); row.appendChild(inp);
+      var fact = el('input', 'text-input fact-input');
+      fact.type = 'text';
+      fact.value = (q.facts || [])[i] || '';
+      fact.placeholder = '正解発表で出す数字（なくてもOK）例：約946万人';
+      fact.setAttribute('aria-label', '選択肢' + (i + 1) + 'の数字');
+      fact.addEventListener('input', function () { q.facts = factsOf(q); q.facts[i] = fact.value; saveQ(); });
+      row.appendChild(sw); row.appendChild(lab); row.appendChild(inp); row.appendChild(fact);
       box.appendChild(row);
     });
     var lc = $('fLimit');
@@ -1527,11 +1536,17 @@
   function clone(x) { return JSON.parse(JSON.stringify(x)); }
   function setQuestions(set) { return set.questions.concat(LOCAL_ADDS[set.id] || []); }
   function addsCount() { var n = 0; Object.keys(LOCAL_ADDS).forEach(function (k) { n += (LOCAL_ADDS[k] || []).length; }); return n; }
+  // Optional numbers shown under each choice at the reveal (ranking values, distances...). Same order as choices.
+  function factsOf(q) {
+    var f = Array.isArray(q.facts) ? q.facts.slice(0, 4).map(function (x) { return x == null ? '' : String(x); }) : [];
+    while (f.length < 4) f.push('');
+    return f;
+  }
   function cleanQuestion(q) {
     var choices = (q.choices || []).slice(0, 4).map(String);
     while (choices.length < 4) choices.push('');
     return { text: String(q.text || ''), photo: typeof q.photo === 'string' && q.photo.indexOf('data:image/') === 0 ? q.photo : null,
-      choices: choices, correct: Math.max(0, Math.min(3, q.correct | 0)), limit: LIMITS.indexOf(q.limit) >= 0 ? q.limit : 20, cat: catOf(q) };
+      choices: choices, correct: Math.max(0, Math.min(3, q.correct | 0)), limit: LIMITS.indexOf(q.limit) >= 0 ? q.limit : 20, cat: catOf(q), facts: factsOf(q) };
   }
 
   function renderSets() {
@@ -1735,7 +1750,7 @@
           var choices = q.choices.slice(0, 4).map(String);
           while (choices.length < 4) choices.push('');
           return { text: String(q.text || ''), photo: typeof q.photo === 'string' && q.photo.indexOf('data:image/') === 0 ? q.photo : null,
-            choices: choices, correct: Math.max(0, Math.min(3, q.correct | 0)), limit: LIMITS.indexOf(q.limit) >= 0 ? q.limit : 20, cat: catOf(q) };
+            choices: choices, correct: Math.max(0, Math.min(3, q.correct | 0)), limit: LIMITS.indexOf(q.limit) >= 0 ? q.limit : 20, cat: catOf(q), facts: factsOf(q) };
         });
         if (!list.length) throw new Error('empty');
         // drop untouched blank questions so an import into an empty editor leaves no stray item
@@ -1853,7 +1868,8 @@
     var q = H.game[H.qi];
     var choices = [], map = [];
     q.choices.forEach(function (c, i) { if (c && c.trim()) { map.push(i); choices.push(c.trim()); } });
-    H.cur = { text: q.text.trim(), photo: q.photo, choices: choices, correct: map.indexOf(q.correct), limit: q.limit };
+    H.cur = { text: q.text.trim(), photo: q.photo, choices: choices, correct: map.indexOf(q.correct), limit: q.limit,
+      facts: map.map(function (i) { return ((q.facts || [])[i] || '').trim(); }) };
     H.phase = 'question'; H.answers = {}; H.startedAt = Date.now();
     H.prevScores = scoreMap();
     saveHost();
@@ -1867,6 +1883,7 @@
     $('qBody').classList.toggle('has-photo', !!H.cur.photo && !!H.cur.text);
     var box = $('hAnswers');
     box.textContent = '';
+    box.classList.remove('has-facts');
     choices.forEach(function (c, i) { box.appendChild(answerTile(i, c)); });
     $('revealRow').hidden = true; $('skipRow').hidden = false;
     updateAnswered(); show('hQuestion'); Music.sfx('question'); Music.play('think');
@@ -1925,7 +1942,10 @@
 
   function showAnswer(counts) {
     var tiles = $('hAnswers').children;
+    var facts = H.cur.facts || [];
+    $('hAnswers').classList.toggle('has-facts', facts.some(Boolean));
     for (var i = 0; i < tiles.length; i++) {
+      if (facts[i]) tiles[i].appendChild(el('span', 'fact', facts[i]));
       tiles[i].classList.toggle('dim', i !== H.cur.correct);
       tiles[i].classList.toggle('right', i === H.cur.correct);
       tiles[i].appendChild(el('span', 'cnt', counts[i] + '人'));
