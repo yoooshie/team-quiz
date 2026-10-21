@@ -161,4 +161,12 @@
 | 3 | 遊園地の開業年 | ひらかたパーク1912 [京阪電鉄](https://www.keihan.co.jp/k-press/event/202210-closeup.php)・よみうりランド1964 [よみうりランド](https://yomiuriland.co.jp/news/wp-content/uploads/2024/02/release_240219.pdf)・ナガシマスパーランド1966 [ニュースイッチ](https://newswitch.jp/p/16681)・東京ディズニーランド1983 [Forbes JAPAN](https://forbesjapan.com/articles/detail/46850) |
 | 3 | 国の面積（小さい国） | バチカン約0.44・モナコ約2・サンマリノ約61・リヒテンシュタイン約160km² [キッズ外務省](https://www.mofa.go.jp/mofaj/kids/ranking/men_s.html)、[エレミニスト](https://eleminist.com/article/1717?page=2) |
 
-数字を出していない問題：動画配信サービス（2026年の選択肢ごとの利用率が見つからない）、回転ずし（サーモン以外の割合が見つからない）、乗降客数世界一の駅・ファストフードの店舗数・母語の話者数（同じ基準でそろった数字が見つからない）。
+| 1 | 動画配信サービス（概数の扱い） | 利用経験者832人のうち：Amazonプライム・ビデオ66.7%・Netflix44.0%・U-NEXT28.5%・ディズニープラス17.5%（146人÷832人で計算）。2025年12月調査 [VOD STREAM](https://vod.app-liv.jp/archive/155698/) |
+| 1 | 2024年の外国人観光客（イタリア） | 約5,770万人（UN Tourism、205か国中6位）[GLOBAL NOTE](https://www.globalnote.jp/post-2571.html?cat_no=606) |
+| 1 | ギョーザ（大阪市） | 2025年単年の数字が見つからないため、2023〜2025年平均の約2,261円（7位）を「3年平均」として出す [大阪府 品目別ランキング（調理食品）](https://www.pref.osaka.lg.jp/o040090/toukei/kakei/kakei2023-2025.html) |
+| 2 | 回転ずしのネタ | サーモン47.7%・マグロ（赤身）36.4%・えび27.8%・ハマチ・ブリ27.2%（2026年2月調査）[nippon.com](https://www.nippon.com/ja/japan-data/h02749/)、[@DIME](https://dime.jp/genre/2098913/) |
+| 2 | 乗降客数の多い駅（概数・基準がそろわない） | 新宿 約353万人（5社合計）[鉄道チャンネル](https://tetsudo-ch.com/9911491.html)・東京 約90万人（JR東日本のみ）[鉄道チャンネル](https://tetsudo-ch.com/7557690.html)・大阪（梅田）約184万人（JR大阪・阪急・Osaka Metro・阪神の大阪梅田の4駅合計、大阪市統計から計算）[大阪市](https://www.city.osaka.lg.jp/toshikeikaku/cmsfiles/contents/0000577/577243/04_shinkichiku13.pdf)・グランド・セントラル 約75万人（2013年の報道）[AFPBB](https://www.afpbb.com/articles/-/2925033) |
+| 2 | ファストフードの店舗数（概数） | マクドナルド3,025店（2025年12月末）・ケンタッキー1,277店（2025年3月末）[Verdict Foodservice](https://www.verdictfoodservice.com/newsletters/kfc-japan-store-growth-2030)・モスバーガー約1,300店 [All About](https://news.allabout.co.jp/articles/o/71946/)・ミスタードーナツ1,017店（2024年3月末）[ビジネス+IT](https://www.sbbit.jp/article/cont1/180998) |
+| 3 | 母語の話者数（概数） | Ethnologueの数字：中国語（北京語）約9.9億・スペイン語約4.9億・英語約3.9億・ヒンディー語約3.5億人 [La República](https://www.larepublica.co/ocio/conozca-el-top-10-de-los-idiomas-que-mas-se-hablan-en-el-mundo-en-2025-4195013)、[Wikipedia（Ethnologue引用）](https://en.wikipedia.org/wiki/List_of_languages_by_number_of_native_speakers) |
+
+最初は数字が見つからず見送っていた上の7問も、運営の希望で概数を出すことにした（2026年10月22日）。時期や数え方がそろっていないものは、括弧で書いている。
