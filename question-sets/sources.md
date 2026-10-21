@@ -110,3 +110,28 @@
 
 - 社内でメールは使わないため、メールに関する問題はBCC（パート2）以外は外した（パート3の「ご査収」「CC」を差しかえ、パート2「お手すきの際に」は問題文から「ビジネスメールの」を削除）。パート1の「完遂」は「なるはや」に差しかえ。
 - 5回目：パート3の17・19（お辞儀の角度・タクシーの上座）を「クッション言葉」「5W1H」に差しかえ。社内研修の2問を標準問題集から追加用ファイルへ移動。
+
+## パート1 難しめの問題への差しかえ（2026年10月22日）
+
+「もう少し難しい問題があってもいい」というご意見を受けて、今どき問題のうち16問（しか勝たん・サブスク・ストーリーズ・YouTubeショート・X・大谷選手の背番号・50-50・2028年五輪・W杯の出場数・新NISA・Switch 2・ちいかわ・鬼滅の刃・Z世代・消費税・エモい）を入れかえた。番号は standard-part1.json の順番（会社の問題2問を含む）。
+
+| # | 問題（正解） | 根拠 |
+|---|---|---|
+| 9 | 「エビデンス」（根拠・証拠） | [All About](https://news.allabout.co.jp/articles/o/73091/)、[Weblio（evidence）](https://www.weblio.jp/content/evidence) |
+| 10 | 「エスカレーション」（上の立場の人に引き継ぐこと） | [All About](https://news.allabout.co.jp/articles/o/74924/)、[マネーフォワード](https://biz.moneyforward.com/work-efficiency/basic/1901/) |
+| 11 | 「相殺」（そうさい） | デジタル大辞泉の見出しは「そうさい」[コトバンク](https://kotobank.jp/word/相殺)、[ヨムーノ](https://yomuno.jp/posts/142423) |
+| 12 | 「御中」（おんちゅう） | [Weblio](https://www.weblio.jp/content/御中)、[マイナビニュース](https://news.mynavi.jp/article/20200903-1252059/) |
+| 13 | 名乗らない相手に（「失礼ですが、どちら様でしょうか」） | [All About](https://allabout.co.jp/gm/gc/313331/) |
+| 17 | 阪神甲子園球場（兵庫県西宮市） | [tabi-mag](https://tabi-mag.jp/hg0668/)、[土木学会 選奨土木遺産](https://committees.jsce.or.jp/heritage/node/1306) |
+| 18 | 伝言の最後に名乗る（「わたくし〇〇が承りました」） | [All About](https://allabout.co.jp/gm/gc/313317)、[プレジデント](https://president.jp/articles/woman-print/103342) |
+| 20 | 2024年 外国人観光客が一番多い国（フランス） | UN Tourism の集計で1位フランス・2位スペイン [WorldAtlas](https://worldatlas.com/travel/the-world-s-most-visited-countries-55939.html)、[blue News](https://www.bluewin.ch/en/news/these-are-the-most-visited-countries-in-the-world-2781168.html) |
+| 21 | 2025年の訪日外国人1位（韓国 約946万人） | JNTO推計：韓国946万・中国910万・台湾676万・米国331万 [近畿運輸局資料](https://www.kansai.meti.go.jp/2kokusai/ryoujikan/2026forum/2026unyukyoku_mlit_j.pdf)、[トラベルボイス](https://www.travelvoice.jp/20260121-159116) |
+| 23 | 島の数が一番多い都道府県（長崎県 1,479島） | 2位北海道1,473島 [国土地理院](https://www.gsi.go.jp/kihonjohochousa/islands_index.html)、[nippon.com](https://www.nippon.com/ja/japan-data/h01615/) |
+| 24 | 2025年 ギョーザ購入額1位（浜松市） | 総務省家計調査：浜松4,046円・宇都宮3,575円・宮崎3,418円 [浜松市](https://www.city.hamamatsu.shizuoka.jp/documents/171826/0603.pdf) |
+| 26 | 「放出」（はなてん） | JR学研都市線・おおさか東線の駅名 [All About](https://news.allabout.co.jp/articles/o/86661/)、[乗りものニュース](https://trafficnews.jp/post/81631) |
+| 27 | 太陽の塔（岡本太郎） | [大阪府（重要文化財の指定）](https://www.pref.osaka.lg.jp/j_fusei/2510b/2510/cts0102_483.html)、[るるぶ＆more](https://rurubu.jp/andmore/spot/80028831) |
+| 29 | 大阪府で初めての世界遺産（百舌鳥・古市古墳群） | 2019年7月6日登録、大阪府初 [堺市](https://www.city.sakai.lg.jp/kanko/rekishi/sei/samazama_torikumi/h31/PV.html)、[nippon.com](https://www.nippon.com/ja/guide-to-japan/gu900105/) |
+| 31 | USJの開業（2001年） | 年表「2001年 ユニバーサル・スタジオ・ジャパン開業」[ワンキャリア](https://www.onecareer.jp/companies/281)、[マイナビエージェント](https://mynavi-agent.jp/corpdetail/1398/) |
+| 32 | 「稟議」（りんぎ） | [コトバンク](https://kotobank.jp/word/稟議) |
+
+候補から外したもの：「進捗」「役不足」「社外への上司の呼び方」「大谷選手のMVP回数」「二重敬語」「北岳」「日本一高いビル」「国際線の利用者1位の空港」（1回目の案でご指摘）。「応接室の上座」（パート2で外した経緯）、「天下の台所」（江戸時代の呼び名ではなく明治以降の歴史家の言葉という研究がある）、「よろしかったでしょうか」（公的な根拠が見つからない）。
