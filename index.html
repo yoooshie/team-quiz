@@ -236,6 +236,10 @@
   .set-card .nm { font-weight: 800; font-size: 1.25rem; }
   .set-card .ct { font-weight: 800; color: var(--leaf-dark); font-variant-numeric: tabular-nums; }
   .set-card .pv { color: var(--muted); font-size: 0.85rem; overflow-wrap: anywhere; white-space: pre-line; }
+  .set-wrap { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .set-wrap .set-card { flex: 1; }
+  .set-month { margin: 0; text-align: center; font-weight: 800; color: var(--muted); }
+  .set-month.now { color: #fff; background: var(--leaf); border-radius: 999px; padding: 4px 12px; box-shadow: 0 3px 0 var(--leaf-dark); }
   .adds { width: min(100%, 1100px); display: flex; flex-direction: column; gap: 8px; text-align: left; }
   .q-item.dragging { opacity: 0.4; }
   .q-item.drop-target { border-color: var(--a3); border-style: dashed; }
@@ -440,6 +444,7 @@
       <ol class="q-list" id="qList"></ol>
       <div class="row" style="justify-content:flex-start">
         <button type="button" class="btn small" id="addQBtn">＋ 問題を追加</button>
+        <button type="button" class="btn small danger" id="resetQBtn">今日の問題をリセット</button>
       </div>
     </div>
     <div class="board form" id="qForm">
@@ -1532,7 +1537,7 @@
   function renderSets() {
     var box = $('setCards');
     box.textContent = '';
-    function card(label, count, preview, cls, onPick, key, disabled) {
+    function card(label, count, preview, cls, onPick, key, disabled, month) {
       var b = el('button', 'set-card' + (cls ? ' ' + cls : '') + (setArmed === key ? ' armed' : ''));
       b.type = 'button';
       b.disabled = !!disabled;
@@ -1545,12 +1550,23 @@
         setArmed = '';
         onPick();
       });
-      box.appendChild(b);
+      var wrap = el('div', 'set-wrap');
+      wrap.appendChild(b);
+      if (month) wrap.appendChild(el('p', 'set-month' + (month.now ? ' now' : ''), month.text));
+      box.appendChild(wrap);
     }
-    STANDARD_SETS.forEach(function (set) {
+    // The event is monthly and people join for at most 3 months, so parts 1/2/3 rotate by month.
+    var thisMonth = new Date().getMonth() + 1;
+    function monthNote(k) {
+      if (k > 2) return null;
+      var months = [0, 1, 2, 3].map(function (r) { return k + 1 + r * 3; });
+      var now = months.indexOf(thisMonth) >= 0;
+      return { now: now, text: now ? '今月（' + thisMonth + '月）はこちら！' : months.join('・') + '月用' };
+    }
+    STANDARD_SETS.forEach(function (set, k) {
       var qs = setQuestions(set);
       card(set.name, qs.length + '問', qs.length ? qs.slice(0, 2).map(function (q) { return '・' + q.text; }).join('\n') : 'まだ問題がありません', '',
-        function () { useQuestions(qs, set.name); }, set.id, !qs.length);
+        function () { useQuestions(qs, set.name); }, set.id, !qs.length, monthNote(k));
     });
     card('一から作成する', '0問からスタート', '自分たちで1問ずつ作ります', 'blank', function () { useQuestions([blank()], '一から作成'); }, 'blank', false);
     var n = addsCount();
@@ -1579,6 +1595,26 @@
   }
 
   function openSets() { setArmed = ''; renderSets(); show('hSets'); }
+
+  // Clears today's list (not the standard sets or this PC's additions), then back to choosing a set.
+  var resetArmed = false, resetTimer = null;
+  $('resetQBtn').addEventListener('click', function () {
+    var btn = $('resetQBtn');
+    clearTimeout(resetTimer);
+    if (!resetArmed) {
+      resetArmed = true;
+      btn.textContent = 'もう一度押すと今日の問題が全部消えます';
+      resetTimer = setTimeout(function () { resetArmed = false; btn.textContent = '今日の問題をリセット'; }, 4000);
+      return;
+    }
+    resetArmed = false;
+    btn.textContent = '今日の問題をリセット';
+    Q = []; cur = 0; SET_NAME = '';
+    idbSet('questions', Q);
+    idbSet('setName', SET_NAME);
+    openSets();
+    $('setsMsg').textContent = '今日の問題をリセットしました。使う問題集を選んでください。';
+  });
 
   $('toSetsBtn').addEventListener('click', function () { idbSet('questions', Q); openSets(); });
   $('setsBackBtn').addEventListener('click', function () { setArmed = ''; if (Q.length) { renderEditor(); show('hEdit'); } else { renderHome(); show('hHome'); } });
